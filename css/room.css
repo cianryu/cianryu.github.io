@@ -1,0 +1,101 @@
+  page[size="A4"][layout="portrait"] {
+    width: 29.7cm; 
+    height: 21cm; 
+    margin: 0 auto;
+  }
+  body {
+    width: 100%;
+    margin: 0 auto;
+  }
+  table {
+    width: 97.5%;
+    border-collapse: collapse;
+    text-align: center;
+    font-size: 14px;
+    margin-left: 1.25%;
+    border: 2px solid #444444;
+  }
+  th, td {
+    height: 20px;
+    padding: 0;
+  }
+  h2{
+    margin: 10px;
+    display: inline-block;
+  }
+  .container{
+    width: 100%;
+  }
+  .header{
+    margin: 10px 25px 5px 25px;
+  }
+  #content{
+    margin:0 auto;  
+  }
+  .report{
+    border: 1px solid #444444;
+    font-size: 16px;
+    height: 180px;
+    font-weight: bold;
+    width: 97.5%;
+    margin-bottom: 5px;
+    margin-top: 15px;
+  }
+  .roomNo{
+    border-top: 1px solid #444444;
+    border-bottom: 1px solid #444444;
+    border-right: 1px solid #444444;
+    border-left: 2px solid #444444;
+    width: 1.5%;
+  }
+  .roomType{
+    border: 1px solid #444444;
+    width: 2%;
+  }
+  .staffNm{
+    border: 1px solid #444444;
+    width: 4%;
+  }
+  .roomStaff{
+    border: 1px solid #444444;
+    background-color: #dddddd;
+    font-size: 15px;
+    height: 20px;
+    font-weight: bold;
+  }
+  .floor{
+    border: 2px solid #444444;
+    font-weight: bold;
+  }
+  .memo{
+    width: 300px;
+  }
+  .type{
+    width: 15px;
+  }
+  .empty-left{
+    border-left: 2px solid #ffffff;
+  }
+  .empty-bottom{
+    border-bottom: 2px solid #ffffff;
+  }
+  .right_end{
+    border-right: 2px solid #444444;
+  }
+  .bottom_end{
+    border-bottom: 2px solid #444444;
+  }
+
+  #uploadBtn1, #uploadBtn2{
+    float: right;
+    margin-top: 10px;
+    margin-right: 0px;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  #print{
+    margin-top: 10px;
+    margin-right: 0px;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
