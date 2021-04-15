@@ -51,7 +51,7 @@ function readExcel2() {
           [key.replace(/\s/g, "")]: parent[key],
         }), {});
       });
-      let 
+      
 
       datas.forEach(row => {
         console.log(JSON.stringify(row));
@@ -109,7 +109,9 @@ function reRoomCheck(){
         roomNo = floorNo + j;
       }
       var roomSId = document.getElementById("s_"+ roomNo);
-      if(roomSId == null) 
+      if(roomSId == null) {
+        
+      }
     }
   }
 }
