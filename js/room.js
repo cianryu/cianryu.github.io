@@ -1,3 +1,16 @@
+let fileCnt = 0;
+let vCnt = 0;
+let cCnt = 0;
+let ooCnt = 0;
+window.addEventListener("load", function(event) {
+  let current = new Date();
+  let year = current.getFullYear();
+  let month = current.getMonth()+1;
+  let day = current.getDate();
+  let currentDt = year + "년 " + month + "월 " + day + "일";
+  document.getElementById("currentDt").innerHTML = currentDt;
+});
+
 function readExcel1() {
   let currentDt = currentDate();
   let testDt = "02/28/2021";
@@ -21,10 +34,11 @@ function readExcel1() {
       });
       datas.forEach(row => {
         if(testDt == row.OrgDepDate){
-          var roomUId = document.getElementById("s_"+row.RmNo);
-          if(roomUId != null){
-            roomUId.innerHTML = "C/O";
-            roomUId.style.color = "red";
+          var roomSId = document.getElementById("s_"+row.RmNo);
+          if(roomSId != null){
+            roomSId.innerHTML = "C";
+            roomSId.style.color = "red";
+            ++cCnt;
           }
         }
       });
@@ -51,27 +65,39 @@ function readExcel2() {
           [key.replace(/\s/g, "")]: parent[key],
         }), {});
       });
-      
 
       datas.forEach(row => {
-        console.log(JSON.stringify(row));
-        if((row.RoomStatus == "Vacant" && row.CleanStatus == "Cleaned")
-          || row.RoomStatus == "Out Of Order"){
-          let roomStatus = "V";
-          let color = "black";
-          if(row.RoomStatus == "Out Of Order"){
-            roomStatus = "O.O"
-            color = "black";
-          }
+        let roomStatus = "V";
+        let color = "black";
+        let size = "small";
+        if((row.RoomStatus == "Vacant" && row.CleanStatus == "Cleaned")){
           delete row.RoomStatus;
           delete row.CleanStatus;
           for(key in row){
             var roomNo = row[key].split(" ")[0];
-            var roomUId = document.getElementById("s_"+roomNo);
             var roomSId = document.getElementById("s_"+roomNo);
-            if(roomUId != null){
+            if(roomSId != null){
               roomSId.innerHTML = roomStatus;
               roomSId.style.color=color;
+              roomSId.style.fontSize=size;
+              ++vCnt;
+            }
+          }
+        }
+        if(row.RoomStatus == "Out Of Order"){
+          roomStatus = "O.O"
+          color = "red";
+          size="xx-small";
+          delete row.RoomStatus;
+          delete row.CleanStatus;
+          for(key in row){
+            var roomNo = row[key].split(" ")[0];
+            var roomSId = document.getElementById("s_"+roomNo);
+            if(roomSId != null){
+              roomSId.innerHTML = roomStatus;
+              roomSId.style.color=color;
+              roomSId.style.fontSize=size;
+              ++ooCnt;
             }
           }
         }
@@ -82,11 +108,21 @@ function readExcel2() {
 }
 
 function reRoomCheck(){
+  if(vCnt == 0){
+    alert("Summary를 업로드 후 진행해주시지 바랍니다.");
+    return;
+  }else if(cCnt == 0){
+    alert("Departure를 업로드 후 진행해주시지 바랍니다.");
+    return;
+  }
   let startRoomNo = 1;
   let endRoomNo = 31;
   let floorNo = "";
   let roomNo = "";
   for(var i = 3 ; i <= 16 ; i++){
+    if(i == 13){
+      continue;
+    }
     switch (i) {
       case 3 : 
         startRoomNo = 5;
@@ -94,23 +130,35 @@ function reRoomCheck(){
         break;
       case 4 : 
         endRoomNo = 34;
+        break;
       case 5 : 
         endRoomNo = 35;
+        break;
       case 16 : 
         endRoomNo = 6;
+        break;
+    default:
+      startRoomNo = 1;
+      endRoomNo = 31;
+      break;
     }
     if(i < 10){
       floorNo = "0" + i;
+    }else{
+      floorNo = i;
     }
+    let roomStatus = "O";
     for(var j = startRoomNo ; j <= endRoomNo ; j++){
-      if(i < 10){
+      if(j < 10){
         roomNo = floorNo + "0" + j;
       }else{
-        roomNo = floorNo + j;
+        roomNo = floorNo + "" + j;
       }
       var roomSId = document.getElementById("s_"+ roomNo);
-      if(roomSId == null) {
-        
+      console.log(roomNo + ":" + roomSId.innerHTML);
+      if(roomSId.innerHTML == "") {
+        console.log(roomNo);
+        roomSId.innerHTML = roomStatus;
       }
     }
   }

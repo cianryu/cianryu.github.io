@@ -10,35 +10,26 @@
 <body>
   <div class="container">
     <div class="header">
-        <input type="file" onchange="readExcel1()" id="uploadBtn1" value="Excel" />
-        <input type="file" onchange="readExcel2()" id="uploadBtn2" value="Excel" />
+        <input type="file" onchange="readExcel1()" id="uploadBtn1" value="Departure" />
+        <input type="file" onchange="readExcel2()" id="uploadBtn2" value="Summary" />
+        <input type="button" onclick="reRoomCheck()" id="reRoom" value="Occupied" />
         <input type="button" onclick="printPage()" id="print" value="프린트" />
     </div>
     <div id="content">
       <table class="report">
-        <tr>
-          <td class="type"></td>
-          <td class="type"></td>
-          <td class="type"></td>
-          <td class="type"></td>
-          <td class="type"></td>
-          <td class="type"></td>
-          <td class="type"></td>
-          <td class="type"></td>
-          <td class="type"></td>
-          <td class="type"></td>
-        </tr>
-        <tr>
-          <td class="type"></td>
-          <td class="type"></td>
-          <td colspan="2" class="type"></td>
-          <td class="type"></td>
-          <td colspan="2" class="type"></td>
-          <td class="type"></td>
-          <td colspan="2" class="type"></td>
-        </tr>
+        <tbody>
+          <tr>
+            <td class="currentDt" id="currentDt"></td>
+            <td></td>
+            <td>Not Cleaning</td>
+            <td></td>
+            <td>RM Assignment</td>
+            <td></td>
+            <td>명</td>
+          </tr>
+        </tbody>
       </table>
-      <table>
+      <table class="room">
         <tr>
           <td colspan="3" class="floor">3F</td>
           <td colspan="3" class="floor">4F</td>
@@ -55,12 +46,10 @@
           <td colspan="3" class="floor">16F</td>
         </tr>
         <tr>
-          <td class="roomNo 3F">05</td>
-          <td class="roomType" id="s_0305"></td>
-          <td class="staffNm" id="u_0305"></td>
+          <td rowspan="4" colspan="3" class="etc-room bottom_end">Linen<br>Storage</td>
           <td class="roomNo 4F">01</td>
           <td class="roomType" id="s_0401"></td>
-          <td class="staffNm" id="u_0401"></td>
+          <td class="staffNm" id="u_0401">신숙향</td>
           <td class="roomNo 5F">01</td>
           <td class="roomType" id="s_0501"></td>
           <td class="staffNm" id="u_0501"></td>
@@ -91,14 +80,12 @@
           <td class="roomNo 15F">01</td>
           <td class="roomType" id="s_1501"></td>
           <td class="staffNm" id="u_1501"></td>
-          <td class="roomNo 16F">01</td>
-          <td class="roomType" id="s_1601"></td>
-          <td class="staffNm right_end" id="u_1601"></td>
+          <td rowspan="2" class="roomNo 16F">01</td>
+          <td rowspan="2" class="roomType" id="s_1601"></td>
+          <td rowspan="2" class="staffNm right_end" id="u_1601"></td>
         </tr>
         <tr>
-          <td class="roomNo 3F">06</td>
-          <td class="roomType" id="s_0306"></td>
-          <td class="staffNm" id="u_0306"></td>
+
           <td class="roomNo 4F">02</td>
           <td class="roomType" id="s_0402"></td>
           <td class="staffNm" id="u_0402"></td>
@@ -132,14 +119,8 @@
           <td class="roomNo 15F">02</td>
           <td class="roomType" id="s_1502"></td>
           <td class="staffNm" id="u_1502"></td>
-          <td class="roomNo 16F">02</td>
-          <td class="roomType" id="s_1602"></td>
-          <td class="staffNm right_end" id="u_1602"></td>
         </tr>
         <tr>
-          <td class="roomNo 3F">07</td>
-          <td class="roomType" id="s_0307"></td>
-          <td class="staffNm" id="u_0307"></td>
           <td class="roomNo 4F">03</td>
           <td class="roomType" id="s_0403"></td>
           <td class="staffNm" id="u_0403"></td>
@@ -173,14 +154,12 @@
           <td class="roomNo 15F">03</td>
           <td class="roomType" id="s_1503"></td>
           <td class="staffNm" id="u_1503"></td>
-          <td class="roomNo 16F">03</td>
-          <td class="roomType" id="s_1603"></td>
-          <td class="staffNm right_end" id="u_1603"></td>
+          <td rowspan="2" class="roomNo 16F">02</td>
+          <td rowspan="2" class="roomType" id="s_1602"></td>
+          <td rowspan="2" class="staffNm right_end" id="u_1602"></td>
         </tr>
         <tr>
-          <td class="roomNo 3F">08</td>
-          <td class="roomType" id="s_0308"></td>
-          <td class="staffNm" id="u_0308"></td>
+
           <td class="roomNo 4F">04</td>
           <td class="roomType" id="s_0404"></td>
           <td class="staffNm" id="u_0404"></td>
@@ -214,55 +193,52 @@
           <td class="roomNo 15F">04</td>
           <td class="roomType" id="s_1504"></td>
           <td class="staffNm" id="u_1504"></td>
-          <td class="roomNo 16F">04</td>
-          <td class="roomType" id="s_1604"></td>
-          <td class="staffNm right_end" id="u_1604"></td>
         </tr>
         <tr>
-          <td class="roomNo 3F">09</td>
-          <td class="roomType" id="s_0309"></td>
-          <td class="staffNm" id="u_0309"></td>
-          <td class="roomNo 4F">05</td>
-          <td class="roomType" id="s_0405"></td>
-          <td class="staffNm" id="u_0405"></td>
-          <td class="roomNo 5F">05</td>
-          <td class="roomType" id="s_0505"></td>
-          <td class="staffNm" id="u_0505"></td>
-          <td class="roomNo 6F">05</td>
-          <td class="roomType" id="s_0605"></td>
-          <td class="staffNm" id="u_0605"></td>
-          <td class="roomNo 7F">05</td>
-          <td class="roomType" id="s_0705"></td>
-          <td class="staffNm" id="u_0705"></td>
-          <td class="roomNo 8F">05</td>
-          <td class="roomType" id="s_0805"></td>
-          <td class="staffNm" id="u_0805"></td>
-          <td class="roomNo 9F">05</td>
-          <td class="roomType" id="s_0905"></td>
-          <td class="staffNm" id="u_0905"></td>
-          <td class="roomNo 10F">05</td>
-          <td class="roomType" id="s_1005"></td>
-          <td class="staffNm" id="u_1005"></td>
-          <td class="roomNo 11F">05</td>
-          <td class="roomType" id="s_1105"></td>
-          <td class="staffNm" id="u_1105"></td>
-          <td class="roomNo 12F">05</td>
-          <td class="roomType" id="s_1205"></td>
-          <td class="staffNm" id="u_1205"></td>
-          <td class="roomNo 14F">05</td>
-          <td class="roomType" id="s_1405"></td>
-          <td class="staffNm" id="u_1405"></td>
-          <td class="roomNo 15F">05</td>
-          <td class="roomType" id="s_1505"></td>
-          <td class="staffNm" id="u_1505"></td>
-          <td class="roomNo 16F">05</td>
-          <td class="roomType" id="s_1605"></td>
-          <td class="staffNm right_end" id="u_1605"></td>
+          <td class="roomNo 3F bottom_end">05</td>
+          <td class="roomType bottom_end" id="s_0305"></td>
+          <td class="staffNm bottom_end" id="u_0305"></td>
+          <td class="roomNo 4F bottom_end">05</td>
+          <td class="roomType bottom_end" id="s_0405"></td>
+          <td class="staffNm bottom_end" id="u_0405"></td>
+          <td class="roomNo 5F bottom_end">05</td>
+          <td class="roomType bottom_end" id="s_0505"></td>
+          <td class="staffNm bottom_end" id="u_0505"></td>
+          <td class="roomNo 6F bottom_end">05</td>
+          <td class="roomType bottom_end" id="s_0605"></td>
+          <td class="staffNm bottom_end" id="u_0605"></td>
+          <td class="roomNo 7F bottom_end">05</td>
+          <td class="roomType bottom_end" id="s_0705"></td>
+          <td class="staffNm bottom_end" id="u_0705"></td>
+          <td class="roomNo 8F bottom_end">05</td>
+          <td class="roomType bottom_end" id="s_0805"></td>
+          <td class="staffNm bottom_end" id="u_0805"></td>
+          <td class="roomNo 9F bottom_end">05</td>
+          <td class="roomType bottom_end" id="s_0905"></td>
+          <td class="staffNm bottom_end" id="u_0905"></td>
+          <td class="roomNo 10F bottom_end">05</td>
+          <td class="roomType bottom_end" id="s_1005"></td>
+          <td class="staffNm bottom_end" id="u_1005"></td>
+          <td class="roomNo 11F bottom_end">05</td>
+          <td class="roomType bottom_end" id="s_1105"></td>
+          <td class="staffNm bottom_end" id="u_1105"></td>
+          <td class="roomNo 12F bottom_end">05</td>
+          <td class="roomType bottom_end" id="s_1205"></td>
+          <td class="staffNm bottom_end" id="u_1205"></td>
+          <td class="roomNo 14F bottom_end">05</td>
+          <td class="roomType bottom_end" id="s_1405"></td>
+          <td class="staffNm bottom_end" id="u_1405"></td>
+          <td class="roomNo 15F bottom_end">05</td>
+          <td class="roomType bottom_end" id="s_1505"></td>
+          <td class="staffNm bottom_end" id="u_1505"></td>
+          <td rowspan="2" class="roomNo 16F">03</td>
+          <td rowspan="2" class="roomType" id="s_1603"></td>
+          <td rowspan="2" class="staffNm right_end" id="u_1603"></td>
         </tr>
         <tr>
-          <td class="roomNo 3F">10</td>
-          <td class="roomType" id="s_0310"></td>
-          <td class="staffNm" id="u_0310"></td>
+          <td class="roomNo 3F">06</td>
+          <td class="roomType" id="s_0306"></td>
+          <td class="staffNm" id="u_0306"></td>
           <td class="roomNo 4F">06</td>
           <td class="roomType" id="s_0406"></td>
           <td class="staffNm" id="u_0406"></td>
@@ -296,14 +272,11 @@
           <td class="roomNo 15F">06</td>
           <td class="roomType" id="s_1506"></td>
           <td class="staffNm" id="u_1506"></td>
-          <td class="roomNo 16F bottom_end">06</td>
-          <td class="roomType bottom_end" id="s_1606"></td>
-          <td class="staffNm right_end bottom_end" id="u_1606"></td>
         </tr>
         <tr>
-          <td class="roomNo 3F">11</td>
-          <td class="roomType" id="s_0311"></td>
-          <td class="staffNm" id="u_0311"></td>
+          <td class="roomNo 3F">07</td>
+          <td class="roomType" id="s_0307"></td>
+          <td class="staffNm" id="u_0307"></td>
           <td class="roomNo 4F">07</td>
           <td class="roomType" id="s_0407"></td>
           <td class="staffNm" id="u_0407"></td>
@@ -336,13 +309,15 @@
           <td class="staffNm" id="u_1407"></td>
           <td class="roomNo 15F">07</td>
           <td class="roomType" id="s_1507"></td>
-          <td class="staffNm right_end" id="u_1507"></td>
-          <td rowspan="25" colspan="3" class="empty-bottom"></td>
+          <td class="staffNm" id="u_1507"></td>
+          <td rowspan="2" class="roomNo 16F">04</td>
+          <td rowspan="2" class="roomType" id="s_1604"></td>
+          <td rowspan="2" class="staffNm right_end" id="u_1604"></td>
         </tr>
         <tr>
-          <td class="roomNo 3F">12</td>
-          <td class="roomType" id="s_0312"></td>
-          <td class="staffNm" id="u_0312"></td>
+          <td class="roomNo 3F">08</td>
+          <td class="roomType" id="s_0308"></td>
+          <td class="staffNm" id="u_0308"></td>
           <td class="roomNo 4F">08</td>
           <td class="roomType" id="s_0408"></td>
           <td class="staffNm" id="u_0408"></td>
@@ -378,9 +353,9 @@
           <td class="staffNm right_end" id="u_1508"></td>
         </tr>
         <tr>
-          <td class="roomNo 3F">13</td>
-          <td class="roomType" id="s_0313"></td>
-          <td class="staffNm" id="u_0313"></td>
+          <td class="roomNo 3F">09</td>
+          <td class="roomType" id="s_0309"></td>
+          <td class="staffNm" id="u_0309"></td>
           <td class="roomNo 4F">09</td>
           <td class="roomType" id="s_0409"></td>
           <td class="staffNm" id="u_0409"></td>
@@ -413,51 +388,54 @@
           <td class="staffNm" id="u_1409"></td>
           <td class="roomNo 15F">09</td>
           <td class="roomType" id="s_1509"></td>
-          <td class="staffNm right_end" id="u_1509"></td>
+          <td class="staffNm" id="u_1509"></td>
+          <td rowspan="2" class="roomNo 16F">05</td>
+          <td rowspan="2" class="roomType" id="s_1605"></td>
+          <td rowspan="2" class="staffNm right_end" id="u_1605"></td>
         </tr>
         <tr>
-          <td class="roomNo 3F">14</td>
-          <td class="roomType" id="s_0314"></td>
-          <td class="staffNm" id="u_0314"></td>
-          <td class="roomNo 4F">10</td>
-          <td class="roomType" id="s_0410"></td>
-          <td class="staffNm" id="u_0410"></td>
-          <td class="roomNo 5F">10</td>
-          <td class="roomType" id="s_0510"></td>
-          <td class="staffNm" id="u_0510"></td>
-          <td class="roomNo 6F">10</td>
-          <td class="roomType" id="s_0610"></td>
-          <td class="staffNm" id="u_0610"></td>
-          <td class="roomNo 7F">10</td>
-          <td class="roomType" id="s_0710"></td>
-          <td class="staffNm" id="u_0710"></td>
-          <td class="roomNo 8F">10</td>
-          <td class="roomType" id="s_0810"></td>
-          <td class="staffNm" id="u_0810"></td>
-          <td class="roomNo 9F">10</td>
-          <td class="roomType" id="s_0910"></td>
-          <td class="staffNm" id="u_0910"></td>
-          <td class="roomNo 10F">10</td>
-          <td class="roomType" id="s_1010"></td>
-          <td class="staffNm" id="u_1010"></td>
-          <td class="roomNo 11F">10</td>
-          <td class="roomType" id="s_1110"></td>
-          <td class="staffNm" id="u_1110"></td>
-          <td class="roomNo 12F">10</td>
-          <td class="roomType" id="s_1210"></td>
-          <td class="staffNm" id="u_1210"></td>
-          <td class="roomNo 14F">10</td>
-          <td class="roomType" id="s_1410"></td>
-          <td class="staffNm" id="u_1410"></td>
-          <td class="roomNo 15F">10</td>
-          <td class="roomType" id="s_1510"></td>
-          <td class="staffNm right_end" id="u_1510"></td>
+          <td class="roomNo 3F bottom_end" bottom_end>10</td>
+          <td class="roomType bottom_end" id="s_0310"></td>
+          <td class="staffNm bottom_end" id="u_0310"></td>
+          <td class="roomNo 4F bottom_end">10</td>
+          <td class="roomType bottom_end" id="s_0410"></td>
+          <td class="staffNm bottom_end" id="u_0410"></td>
+          <td class="roomNo 5F bottom_end">10</td>
+          <td class="roomType bottom_end" id="s_0510"></td>
+          <td class="staffNm bottom_end" id="u_0510"></td>
+          <td class="roomNo 6F bottom_end">10</td>
+          <td class="roomType bottom_end" id="s_0610"></td>
+          <td class="staffNm bottom_end" id="u_0610"></td>
+          <td class="roomNo 7F bottom_end">10</td>
+          <td class="roomType bottom_end" id="s_0710"></td>
+          <td class="staffNm bottom_end" id="u_0710"></td>
+          <td class="roomNo 8F bottom_end">10</td>
+          <td class="roomType bottom_end" id="s_0810"></td>
+          <td class="staffNm bottom_end" id="u_0810"></td>
+          <td class="roomNo 9F bottom_end">10</td>
+          <td class="roomType bottom_end" id="s_0910"></td>
+          <td class="staffNm bottom_end" id="u_0910"></td>
+          <td class="roomNo 10F bottom_end">10</td>
+          <td class="roomType bottom_end" id="s_1010"></td>
+          <td class="staffNm bottom_end" id="u_1010"></td>
+          <td class="roomNo 11F bottom_end">10</td>
+          <td class="roomType bottom_end" id="s_1110"></td>
+          <td class="staffNm bottom_end" id="u_1110"></td>
+          <td class="roomNo 12F bottom_end">10</td>
+          <td class="roomType bottom_end" id="s_1210"></td>
+          <td class="staffNm bottom_end" id="u_1210"></td>
+          <td class="roomNo 14F bottom_end">10</td>
+          <td class="roomType bottom_end" id="s_1410"></td>
+          <td class="staffNm bottom_end" id="u_1410"></td>
+          <td class="roomNo 15F bottom_end">10</td>
+          <td class="roomType bottom_end" id="s_1510"></td>
+          <td class="staffNm right_end bottom_end" id="u_1510"></td>
         </tr>
         <!-- 10end 1staff -->
         <tr>
-          <td class="roomNo 3F">15</td>
-          <td class="roomType" id="s_0315"></td>
-          <td class="staffNm" id="u_0315"></td>
+          <td class="roomNo 3F">11</td>
+          <td class="roomType" id="s_0311"></td>
+          <td class="staffNm" id="u_0311"></td>
           <td class="roomNo 4F">11</td>
           <td class="roomType" id="s_0411"></td>
           <td class="staffNm" id="u_0411"></td>
@@ -490,12 +468,15 @@
           <td class="staffNm" id="u_1411"></td>
           <td class="roomNo 15F">11</td>
           <td class="roomType" id="s_1511"></td>
-          <td class="staffNm right_end" id="u_1511"></td>
+          <td class="staffNm" id="u_1511"></td>
+          <td rowspan="4" class="roomNo 16F bottom_end">06</td>
+          <td rowspan="4" class="roomType bottom_end" id="s_1606"></td>
+          <td rowspan="4" class="staffNm right_end bottom_end" id="u_1606"></td>
         </tr>
         <tr>
-          <td class="roomNo 3F">16</td>
-          <td class="roomType" id="s_0316"></td>
-          <td class="staffNm" id="u_0316"></td>
+          <td class="roomNo 3F">12</td>
+          <td class="roomType" id="s_0312"></td>
+          <td class="staffNm" id="u_0312"></td>
           <td class="roomNo 4F">12</td>
           <td class="roomType" id="s_0412"></td>
           <td class="staffNm" id="u_0412"></td>
@@ -531,9 +512,9 @@
           <td class="staffNm right_end" id="u_1512"></td>
         </tr>
         <tr>
-          <td class="roomNo 3F">17</td>
-          <td class="roomType" id="s_0317"></td>
-          <td class="staffNm" id="u_0317"></td>
+          <td class="roomNo 3F">13</td>
+          <td class="roomType" id="s_0313"></td>
+          <td class="staffNm" id="u_0313"></td>
           <td class="roomNo 4F">13</td>
           <td class="roomType" id="s_0413"></td>
           <td class="staffNm" id="u_0413"></td>
@@ -569,9 +550,9 @@
           <td class="staffNm right_end" id="u_1513"></td>
         </tr>
         <tr>
-          <td class="roomNo 3F">18</td>
-          <td class="roomType" id="s_0318"></td>
-          <td class="staffNm" id="u_0318"></td>
+          <td class="roomNo 3F">14</td>
+          <td class="roomType" id="s_0314"></td>
+          <td class="staffNm" id="u_0314"></td>
           <td class="roomNo 4F">14</td>
           <td class="roomType" id="s_0414"></td>
           <td class="staffNm" id="u_0414"></td>
@@ -607,9 +588,9 @@
           <td class="staffNm right_end" id="u_1514"></td>
         </tr>
         <tr>
-          <td class="roomNo 3F">19</td>
-          <td class="roomType" id="s_0319"></td>
-          <td class="staffNm" id="u_0319"></td>
+          <td class="roomNo 3F">15</td>
+          <td class="roomType" id="s_0315"></td>
+          <td class="staffNm" id="u_0315"></td>
           <td class="roomNo 4F">15</td>
           <td class="roomType" id="s_0415"></td>
           <td class="staffNm" id="u_0415"></td>
@@ -643,11 +624,12 @@
           <td class="roomNo 15F">15</td>
           <td class="roomType" id="s_1515"></td>
           <td class="staffNm right_end" id="u_1515"></td>
+          <td rowspan="2" colspan="3" class="etc-room bottom_end">회장님실</td>
         </tr>
         <tr>
-          <td class="roomNo 3F">20</td>
-          <td class="roomType" id="s_0320"></td>
-          <td class="staffNm" id="u_0320"></td>
+          <td class="roomNo 3F">16</td>
+          <td class="roomType" id="s_0316"></td>
+          <td class="staffNm" id="u_0316"></td>
           <td class="roomNo 4F">16</td>
           <td class="roomType" id="s_0416"></td>
           <td class="staffNm" id="u_0416"></td>
@@ -683,9 +665,9 @@
           <td class="staffNm right_end" id="u_1516"></td>
         </tr>
         <tr>
-          <td class="roomNo 3F">21</td>
-          <td class="roomType" id="s_0321"></td>
-          <td class="staffNm" id="u_0321"></td>
+          <td class="roomNo 3F">17</td>
+          <td class="roomType" id="s_0317"></td>
+          <td class="staffNm" id="u_0317"></td>
           <td class="roomNo 4F">17</td>
           <td class="roomType" id="s_0417"></td>
           <td class="staffNm" id="u_0417"></td>
@@ -719,11 +701,12 @@
           <td class="roomNo 15F">17</td>
           <td class="roomType" id="s_1517"></td>
           <td class="staffNm right_end" id="u_1517"></td>
+          <td rowspan="2" colspan="3" class="etc-room bottom_end">부회장님실</td>
         </tr>
         <tr>
-          <td class="roomNo 3F bottom_end">22</td>
-          <td class="roomType bottom_end" id="s_0322"></td>
-          <td class="staffNm bottom_end" id="u_0322"></td>
+          <td class="roomNo 3F">18</td>
+          <td class="roomType" id="s_0318"></td>
+          <td class="staffNm" id="u_0318"></td>
           <td class="roomNo 4F">18</td>
           <td class="roomType" id="s_0418"></td>
           <td class="staffNm" id="u_0418"></td>
@@ -759,7 +742,9 @@
           <td class="staffNm right_end" id="u_1518"></td>
         </tr>
         <tr>
-          <td rowspan="17" colspan="3"></td>
+          <td class="roomNo 3F">19</td>
+          <td class="roomType" id="s_0319"></td>
+          <td class="staffNm" id="u_0319"></td>
           <td class="roomNo 4F">19</td>
           <td class="roomType" id="s_0419"></td>
           <td class="staffNm" id="u_0419"></td>
@@ -793,8 +778,12 @@
           <td class="roomNo 15F">19</td>
           <td class="roomType" id="s_1519"></td>
           <td class="staffNm right_end" id="u_1519"></td>
+          <td rowspan="18" colspan="3" class="bottom_end"></td>
         </tr>
         <tr>
+          <td class="roomNo 3F">20</td>
+          <td class="roomType" id="s_0320"></td>
+          <td class="staffNm" id="u_0320"></td>
           <td class="roomNo 4F">20</td>
           <td class="roomType" id="s_0420"></td>
           <td class="staffNm" id="u_0420"></td>
@@ -830,48 +819,54 @@
           <td class="staffNm right_end" id="u_1520"></td>
         </tr>
         <tr>
-          <td class="roomNo 4F">21</td>
-          <td class="roomType" id="s_0421"></td>
-          <td class="staffNm" id="u_0421"></td>
+          <td class="roomNo 3F">21</td>
+          <td class="roomType" id="s_0321"></td>
+          <td class="staffNm" id="u_0321"></td>
+          <td class="roomNo 4F bottom_end">21</td>
+          <td class="roomType bottom_end" id="s_0421"></td>
+          <td class="staffNm bottom_end" id="u_0421"></td>
           <td class="roomNo 5F">21</td>
           <td class="roomType" id="s_0521"></td>
           <td class="staffNm" id="u_0521"></td>
-          <td class="roomNo 6F">21</td>
-          <td class="roomType" id="s_0621"></td>
-          <td class="staffNm" id="u_0621"></td>
-          <td class="roomNo 7F">21</td>
-          <td class="roomType" id="s_0721"></td>
-          <td class="staffNm" id="u_0721"></td>
-          <td class="roomNo 8F">21</td>
-          <td class="roomType" id="s_0821"></td>
-          <td class="staffNm" id="u_0821"></td>
-          <td class="roomNo 9F">21</td>
-          <td class="roomType" id="s_0921"></td>
-          <td class="staffNm" id="u_0921"></td>
-          <td class="roomNo 10F">21</td>
-          <td class="roomType" id="s_1021"></td>
-          <td class="staffNm" id="u_1021"></td>
-          <td class="roomNo 11F">21</td>
-          <td class="roomType" id="s_1121"></td>
-          <td class="staffNm" id="u_1121"></td>
-          <td class="roomNo 12F">21</td>
-          <td class="roomType" id="s_1221"></td>
-          <td class="staffNm" id="u_1221"></td>
-          <td class="roomNo 14F">21</td>
-          <td class="roomType" id="s_1421"></td>
-          <td class="staffNm" id="u_1421"></td>
-          <td class="roomNo 15F">21</td>
-          <td class="roomType" id="s_1521"></td>
-          <td class="staffNm right_end" id="u_1521"></td>
+          <td class="roomNo 6F bottom_end">21</td>
+          <td class="roomType bottom_end" id="s_0621"></td>
+          <td class="staffNm bottom_end" id="u_0621"></td>
+          <td class="roomNo 7F bottom_end">21</td>
+          <td class="roomType bottom_end" id="s_0721"></td>
+          <td class="staffNm bottom_end" id="u_0721"></td>
+          <td class="roomNo 8F bottom_end">21</td>
+          <td class="roomType bottom_end" id="s_0821"></td>
+          <td class="staffNm bottom_end" id="u_0821"></td>
+          <td class="roomNo 9F bottom_end">21</td>
+          <td class="roomType bottom_end" id="s_0921"></td>
+          <td class="staffNm bottom_end" id="u_0921"></td>
+          <td class="roomNo 10F bottom_end">21</td>
+          <td class="roomType bottom_end" id="s_1021"></td>
+          <td class="staffNm bottom_end" id="u_1021"></td>
+          <td class="roomNo 11F bottom_end">21</td>
+          <td class="roomType bottom_end" id="s_1121"></td>
+          <td class="staffNm bottom_end" id="u_1121"></td>
+          <td class="roomNo 12F bottom_end">21</td>
+          <td class="roomType bottom_end" id="s_1221"></td>
+          <td class="staffNm bottom_end" id="u_1221"></td>
+          <td class="roomNo 14F bottom_end">21</td>
+          <td class="roomType bottom_end" id="s_1421"></td>
+          <td class="staffNm bottom_end" id="u_1421"></td>
+          <td class="roomNo 15F bottom_end">21</td>
+          <td class="roomType bottom_end" id="s_1521"></td>
+          <td class="staffNm right_end bottom_end" id="u_1521"></td>
         </tr>
         <!-- 21end 2staff -->
         <tr>
+          <td class="roomNo 3F bottom_end">22</td>
+          <td class="roomType bottom_end" id="s_0322"></td>
+          <td class="staffNm bottom_end" id="u_0322"></td>
           <td class="roomNo 4F">22</td>
           <td class="roomType" id="s_0422"></td>
           <td class="staffNm" id="u_0422"></td>
-          <td class="roomNo 5F">22</td>
-          <td class="roomType" id="s_0522"></td>
-          <td class="staffNm" id="u_0522"></td>
+          <td class="roomNo 5F bottom_end">22</td>
+          <td class="roomType bottom_end" id="s_0522"></td>
+          <td class="staffNm bottom_end" id="u_0522"></td>
           <td class="roomNo 6F">22</td>
           <td class="roomType" id="s_0622"></td>
           <td class="staffNm" id="u_0622"></td>
@@ -901,44 +896,50 @@
           <td class="staffNm right_end" id="u_1522"></td>
         </tr>
         <tr>
+          <td rowspan="4" colspan="3" class="bottom_end"></td>
           <td class="roomNo 4F">23</td>
           <td class="roomType" id="s_0423"></td>
           <td class="staffNm" id="u_0423"></td>
-          <td class="roomNo 5F">23</td>
-          <td class="roomType" id="s_0523"></td>
-          <td class="staffNm" id="u_0523"></td>
-          <td class="roomNo 6F">23</td>
-          <td class="roomType" id="s_0623"></td>
-          <td class="staffNm" id="u_0623"></td>
-          <td class="roomNo 7F">23</td>
-          <td class="roomType" id="s_0723"></td>
-          <td class="staffNm" id="u_0723"></td>
-          <td class="roomNo 8F">23</td>
-          <td class="roomType" id="s_0823"></td>
-          <td class="staffNm" id="u_0823"></td>
-          <td class="roomNo 9F">23</td>
-          <td class="roomType" id="s_0923"></td>
-          <td class="staffNm" id="u_0923"></td>
-          <td class="roomNo 10F">23</td>
-          <td class="roomType" id="s_1023"></td>
-          <td class="staffNm" id="u_1023"></td>
-          <td class="roomNo 11F">23</td>
-          <td class="roomType" id="s_1123"></td>
-          <td class="staffNm" id="u_1123"></td>
-          <td class="roomNo 12F">23</td>
-          <td class="roomType" id="s_1223"></td>
-          <td class="staffNm" id="u_1223"></td>
-          <td class="roomNo 14F">23</td>
-          <td class="roomType" id="s_1423"></td>
-          <td class="staffNm" id="u_1423"></td>
-          <td class="roomNo 15F">23</td>
-          <td class="roomType" id="s_1523"></td>
-          <td class="staffNm right_end" id="u_1523"></td>
+          <td rowspan="2" class="roomNo 5F">23</td>
+          <td rowspan="2" class="roomType" id="s_0523"></td>
+          <td rowspan="2" class="staffNm" id="u_0523"></td>
+          <td rowspan="2" class="roomNo 6F">23</td>
+          <td rowspan="2" class="roomType" id="s_0623"></td>
+          <td rowspan="2" class="staffNm" id="u_0623"></td>
+          <td rowspan="2" class="roomNo 7F">23</td>
+          <td rowspan="2" class="roomType" id="s_0723"></td>
+          <td rowspan="2" class="staffNm" id="u_0723"></td>
+          <td rowspan="2" class="roomNo 8F">23</td>
+          <td rowspan="2" class="roomType" id="s_0823"></td>
+          <td rowspan="2" class="staffNm" id="u_0823"></td>
+          <td rowspan="2" class="roomNo 9F">23</td>
+          <td rowspan="2" class="roomType" id="s_0923"></td>
+          <td rowspan="2" class="staffNm" id="u_0923"></td>
+          <td rowspan="2" class="roomNo 10F">23</td>
+          <td rowspan="2" class="roomType" id="s_1023"></td>
+          <td rowspan="2" class="staffNm" id="u_1023"></td>
+          <td rowspan="2" class="roomNo 11F">23</td>
+          <td rowspan="2" class="roomType" id="s_1123"></td>
+          <td rowspan="2" class="staffNm" id="u_1123"></td>
+          <td rowspan="2" class="roomNo 12F">23</td>
+          <td rowspan="2" class="roomType" id="s_1223"></td>
+          <td rowspan="2" class="staffNm" id="u_1223"></td>
+          <td rowspan="2" class="roomNo 14F">23</td>
+          <td rowspan="2" class="roomType" id="s_1423"></td>
+          <td rowspan="2" class="staffNm" id="u_1423"></td>
+          <td rowspan="2" class="roomNo 15F">23</td>
+          <td rowspan="2" class="roomType" id="s_1523"></td>
+          <td rowspan="2" class="staffNm right_end" id="u_1523"></td>
         </tr>
         <tr>
           <td class="roomNo 4F">24</td>
           <td class="roomType" id="s_0424"></td>
           <td class="staffNm" id="u_0424"></td>
+        </tr>
+        <tr>
+          <td class="roomNo 4F">25</td>
+          <td class="roomType" id="s_0425"></td>
+          <td class="staffNm" id="u_0425"></td>
           <td class="roomNo 5F">24</td>
           <td class="roomType" id="s_0524"></td>
           <td class="staffNm" id="u_0524"></td>
@@ -971,9 +972,9 @@
           <td class="staffNm right_end" id="u_1524"></td>
         </tr>
         <tr>
-          <td class="roomNo 4F">25</td>
-          <td class="roomType" id="s_0425"></td>
-          <td class="staffNm" id="u_0425"></td>
+          <td class="roomNo 4F">26</td>
+          <td class="roomType" id="s_0426"></td>
+          <td class="staffNm" id="u_0426"></td>
           <td class="roomNo 5F">25</td>
           <td class="roomType" id="s_0525"></td>
           <td class="staffNm" id="u_0525"></td>
@@ -1006,44 +1007,45 @@
           <td class="staffNm right_end" id="u_1525"></td>
         </tr>
         <tr>
-          <td class="roomNo 4F">26</td>
-          <td class="roomType" id="s_0426"></td>
-          <td class="staffNm" id="u_0426"></td>
+          <td rowspan="3" colspan="3" class="etc-room bottom_end">Board<br>Casting<br>Room</td>
+          <td class="roomNo 4F bottom_end">27</td>
+          <td class="roomType bottom_end" id="s_0427"></td>
+          <td class="staffNm bottom_end" id="u_0427"></td>
           <td class="roomNo 5F">26</td>
           <td class="roomType" id="s_0526"></td>
           <td class="staffNm" id="u_0526"></td>
-          <td class="roomNo 6F">26</td>
-          <td class="roomType" id="s_0626"></td>
-          <td class="staffNm" id="u_0626"></td>
-          <td class="roomNo 7F">26</td>
-          <td class="roomType" id="s_0726"></td>
-          <td class="staffNm" id="u_0726"></td>
-          <td class="roomNo 8F">26</td>
-          <td class="roomType" id="s_0826"></td>
-          <td class="staffNm" id="u_0826"></td>
-          <td class="roomNo 9F">26</td>
-          <td class="roomType" id="s_0926"></td>
-          <td class="staffNm" id="u_0926"></td>
-          <td class="roomNo 10F">26</td>
-          <td class="roomType" id="s_1026"></td>
-          <td class="staffNm" id="u_1026"></td>
-          <td class="roomNo 11F">26</td>
-          <td class="roomType" id="s_1126"></td>
-          <td class="staffNm" id="u_1126"></td>
-          <td class="roomNo 12F">26</td>
-          <td class="roomType" id="s_1226"></td>
-          <td class="staffNm" id="u_1226"></td>
-          <td class="roomNo 14F">26</td>
-          <td class="roomType" id="s_1426"></td>
-          <td class="staffNm" id="u_1426"></td>
-          <td class="roomNo 15F">26</td>
-          <td class="roomType" id="s_1526"></td>
-          <td class="staffNm right_end" id="u_1526"></td>
+          <td class="roomNo 6F bottom_end">26</td>
+          <td class="roomType bottom_end" id="s_0626"></td>
+          <td class="staffNm bottom_end" id="u_0626"></td>
+          <td class="roomNo 7F bottom_end">26</td>
+          <td class="roomType bottom_end" id="s_0726"></td>
+          <td class="staffNm bottom_end" id="u_0726"></td>
+          <td class="roomNo 8F bottom_end">26</td>
+          <td class="roomType bottom_end" id="s_0826"></td>
+          <td class="staffNm bottom_end" id="u_0826"></td>
+          <td class="roomNo 9F bottom_end">26</td>
+          <td class="roomType bottom_end" id="s_0926"></td>
+          <td class="staffNm bottom_end" id="u_0926"></td>
+          <td class="roomNo 10F bottom_end">26</td>
+          <td class="roomType bottom_end" id="s_1026"></td>
+          <td class="staffNm bottom_end" id="u_1026"></td>
+          <td class="roomNo 11F bottom_end">26</td>
+          <td class="roomType bottom_end" id="s_1126"></td>
+          <td class="staffNm bottom_end" id="u_1126"></td>
+          <td class="roomNo 12F bottom_end">26</td>
+          <td class="roomType bottom_end" id="s_1226"></td>
+          <td class="staffNm bottom_end" id="u_1226"></td>
+          <td class="roomNo 14F bottom_end">26</td>
+          <td class="roomType bottom_end" id="s_1426"></td>
+          <td class="staffNm bottom_end" id="u_1426"></td>
+          <td class="roomNo 15F bottom_end">26</td>
+          <td class="roomType bottom_end" id="s_1526"></td>
+          <td class="staffNm right_end bottom_end" id="u_1526"></td>
         </tr>
         <tr>
-          <td class="roomNo 4F">27</td>
-          <td class="roomType" id="s_0427"></td>
-          <td class="staffNm" id="u_0427"></td>
+          <td class="roomNo 4F">28</td>
+          <td class="roomType" id="s_0428"></td>
+          <td class="staffNm" id="u_0428"></td>
           <td class="roomNo 5F">27</td>
           <td class="roomType" id="s_0527"></td>
           <td class="staffNm" id="u_0527"></td>
@@ -1076,12 +1078,12 @@
           <td class="staffNm right_end" id="u_1527"></td>
         </tr>
         <tr>
-          <td class="roomNo 4F">28</td>
-          <td class="roomType" id="s_0428"></td>
-          <td class="staffNm" id="u_0428"></td>
-          <td class="roomNo 5F">28</td>
-          <td class="roomType" id="s_0528"></td>
-          <td class="staffNm" id="u_0528"></td>
+          <td class="roomNo 4F">29</td>
+          <td class="roomType" id="s_0429"></td>
+          <td class="staffNm" id="u_0429"></td>
+          <td class="roomNo 5F bottom_end">28</td>
+          <td class="roomType bottom_end" id="s_0528"></td>
+          <td class="staffNm bottom_end" id="u_0528"></td>
           <td class="roomNo 6F">28</td>
           <td class="roomType" id="s_0628"></td>
           <td class="staffNm" id="u_0628"></td>
@@ -1111,9 +1113,10 @@
           <td class="staffNm right_end" id="u_1528"></td>
         </tr>
         <tr>
-          <td class="roomNo 4F">29</td>
-          <td class="roomType" id="s_0429"></td>
-          <td class="staffNm" id="u_0429"></td>
+          <td rowspan="4" colspan="3" class="etc-room bottom_end">Conference<br>Room2</td>
+          <td class="roomNo 4F">30</td>
+          <td class="roomType" id="s_0430"></td>
+          <td class="staffNm" id="u_0430"></td>
           <td class="roomNo 5F">29</td>
           <td class="roomType" id="s_0529"></td>
           <td class="staffNm" id="u_0529"></td>
@@ -1146,9 +1149,9 @@
           <td class="staffNm right_end" id="u_1529"></td>
         </tr>
         <tr>
-          <td class="roomNo 4F">30</td>
-          <td class="roomType" id="s_0430"></td>
-          <td class="staffNm" id="u_0430"></td>
+          <td class="roomNo 4F">31</td>
+          <td class="roomType" id="s_0431"></td>
+          <td class="staffNm" id="u_0431"></td>
           <td class="roomNo 5F">30</td>
           <td class="roomType" id="s_0530"></td>
           <td class="staffNm" id="u_0530"></td>
@@ -1180,10 +1183,11 @@
           <td class="roomType" id="s_1530"></td>
           <td class="staffNm right_end" id="u_1530"></td>
         </tr>
+        <!-- 31end 3staff -->
         <tr>
-          <td class="roomNo 4F">31</td>
-          <td class="roomType" id="s_0431"></td>
-          <td class="staffNm" id="u_0431"></td>
+          <td class="roomNo 4F">32</td>
+          <td class="roomType" id="s_0432"></td>
+          <td class="staffNm" id="u_0432"></td>
           <td class="roomNo 5F">31</td>
           <td class="roomType" id="s_0531"></td>
           <td class="staffNm" id="u_0531"></td>
@@ -1215,39 +1219,51 @@
           <td class="roomType bottom_end" id="s_1531"></td>
           <td class="staffNm right_end bottom_end" id="u_1531"></td>
         </tr>
-        <!-- 31end 3staff -->
-        <tr>
-          <td class="roomNo 4F">32</td>
-          <td class="roomType" id="s_0432"></td>
-          <td class="staffNm" id="u_0432"></td>
-          <td class="roomNo 5F">32</td>
-          <td class="roomType" id="s_0532"></td>
-          <td class="staffNm right_end" id="u_0532"></td>
-          <td rowspan="4" colspan="30"></td>
-        </tr>
         <tr>
           <td class="roomNo 4F">33</td>
           <td class="roomType" id="s_0433"></td>
           <td class="staffNm" id="u_0433"></td>
-          <td class="roomNo 5F">33</td>
-          <td class="roomType" id="s_0533"></td>
-          <td class="staffNm right_end" id="u_0533"></td>
-          
+          <td class="roomNo 5F">32</td>
+          <td class="roomType" id="s_0532"></td>
+          <td class="staffNm right_end" id="u_0532"></td>
+          <td rowspan="5" colspan="27"></td>
         </tr>
         <tr>
+          <td rowspan="3" colspan="3" class="etc-room bottom_end">Conference<br>Room1</td>
           <td class="roomNo 4F bottom_end">34</td>
           <td class="roomType bottom_end" id="s_0434"></td>
           <td class="staffNm bottom_end" id="u_0434"></td>
+          <td class="roomNo 5F">33</td>
+          <td class="roomType" id="s_0533"></td>
+          <td class="staffNm right_end" id="u_0533"></td>
+        </tr>
+        <tr>
+          <td rowspan="2" colspan="3" class="empty-left bottom_end"></td>
           <td class="roomNo 5F">34</td>
           <td class="roomType" id="s_0534"></td>
           <td class="staffNm right_end" id="u_0534"></td>
         </tr>
         <tr>
-          <td colspan="3" class="empty-left"></td>
           <td class="roomNo 5F bottom_end">35</td>
           <td class="roomType bottom_end" id="s_0535"></td>
           <td class="staffNm right_end bottom_end" id="u_0535"></td>
         </tr>
+      </table>
+      <table class="memo">
+        <tbody>
+          <tr>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+          </tr>
+        </tbody>
       </table>
   </div>
   </div>
