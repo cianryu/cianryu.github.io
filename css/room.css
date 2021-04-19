@@ -8,38 +8,62 @@ body {
   margin: 0 auto;
 }
 table {
-  width: 97.5%;
+  width: 93.1%;
   border-collapse: collapse;
   text-align: center;
-  font-size: 14px;
-  margin-left: 1.25%;
-  border: 2px solid #444444;
+  margin-left: 5.5%;
+  
+  font-size: small;
 }
 th, td {
-  height: 20px;
+  height: 14px;
   padding: 0;
-}
-h2{
-  margin: 10px;
-  display: inline-block;
 }
 .container{
   width: 100%;
 }
 .header{
-  margin: 10px 25px 5px 25px;
+  margin: 10px 15px 5px 25px;
 }
 #content{
   margin:0 auto;  
 }
+.room{
+  border: 2px solid #444444;
+}
 .report{
-  border: 1px solid #444444;
+  margin-top: 10px;
+  border-bottom: 0px;
   font-size: 16px;
-  height: 180px;
+  height: 30px;
   font-weight: bold;
-  width: 97.5%;
+  width: 93.1%;
+}
+.report > tbody > tr > td:first-child{
+  width: 13.1%;
+}
+.report > tbody > tr > td:nth-child(2){
+  width: 40%;
+}
+.report > tbody > tr > td:nth-child(3)
+, .report > tbody > tr > td:nth-child(5){
+  width: 12.5%;
+}
+.report > tbody > tr > td:nth-child(4){
+  width: 7.5%;
+}
+.report > tbody > tr > td:nth-child(6){
+  width: 5%;
+}
+.report > tbody > tr > td:nth-child(7){
+  width: 2.5%;
+}
+.memo{
+  border: 2px solid #444444;
+  border-top: 0px;
+  height: 80px;
+  width: 93.1%;
   margin-bottom: 5px;
-  margin-top: 15px;
 }
 .roomNo{
   border-top: 1px solid #444444;
@@ -47,31 +71,20 @@ h2{
   border-right: 1px solid #444444;
   border-left: 2px solid #444444;
   width: 1.5%;
+  font-weight: bold;
 }
 .roomType{
   border: 1px solid #444444;
-  width: 2%;
+  width: 1.6%;
 }
 .staffNm{
   border: 1px solid #444444;
-  width: 4%;
-}
-.roomStaff{
-  border: 1px solid #444444;
-  background-color: #dddddd;
-  font-size: 15px;
-  height: 20px;
-  font-weight: bold;
+  width: 4.2%;
+  font-size: x-small;
 }
 .floor{
   border: 2px solid #444444;
   font-weight: bold;
-}
-.memo{
-  width: 300px;
-}
-.type{
-  width: 15px;
 }
 .empty-left{
   border-left: 2px solid #ffffff;
@@ -85,13 +98,30 @@ h2{
 .bottom_end{
   border-bottom: 2px solid #444444;
 }
-
+.right-bold{
+  border-right: 2px solid #444444; 
+}
+.right-slim{
+  border-right: 1px solid #444444; 
+}
+.etc-room{
+  font-weight: bold;
+  font-size: small;
+}
 #uploadBtn1, #uploadBtn2{
   float: right;
   margin-top: 10px;
   margin-right: 0px;
   margin-bottom: 10px;
   font-size: 16px;
+}
+#reRoom{
+  float: right;
+  margin-top: 10px;
+  margin-right: 15px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  height: 27px;
 }
 #print{
   margin-top: 10px;
