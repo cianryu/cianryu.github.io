@@ -5,6 +5,7 @@ page[size="A4"][layout="portrait"] {
 }
 body {
   width: 100%;
+  height: 100%;
   margin: 0 auto;
 }
 table {
@@ -12,12 +13,24 @@ table {
   border-collapse: collapse;
   text-align: center;
   margin-left: 5.5%;
-  
   font-size: small;
+  height: 100%;
 }
 th, td {
-  height: 14px;
+  height: 2.1%;
   padding: 0;
+}
+
+input[type=text] {
+  width: 90%;
+  font-size: x-small;
+  text-align: center;
+  height: 70%;
+  border: none;
+  border-right: 0px; 
+  border-top: 0px; 
+  border-left: 0px; 
+  border-bottom: 0px;
 }
 .container{
   width: 100%;
