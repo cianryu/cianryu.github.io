@@ -17,15 +17,15 @@ table {
   height: 100%;
 }
 th, td {
-  height: 2.1%;
+  height: 14px;
   padding: 0;
 }
 
-input[type=text] {
-  width: 90%;
+.room input[type=text] {
+  width: 85%;
   font-size: x-small;
   text-align: center;
-  height: 70%;
+  height: 65%;
   border: none;
   border-right: 0px; 
   border-top: 0px; 
@@ -43,9 +43,10 @@ input[type=text] {
 }
 .room{
   border: 2px solid #444444;
+  height: 90%
 }
 .report{
-  margin-top: 10px;
+  margin-top: 30px;
   border-bottom: 0px;
   font-size: 16px;
   height: 30px;
@@ -74,7 +75,7 @@ input[type=text] {
 .memo{
   border: 2px solid #444444;
   border-top: 0px;
-  height: 80px;
+  height: 120px;
   width: 93.1%;
   margin-bottom: 5px;
 }
@@ -121,6 +122,34 @@ input[type=text] {
   font-weight: bold;
   font-size: small;
 }
+.fStaff{
+  width: 92.5%;
+  border-collapse: collapse;
+  text-align: center;
+  font-size: medium;
+  margin-top: 20px;
+  margin-left:3%;
+}
+.fStaff th, .fStaff td {
+  height: 20px;
+  padding: 0;
+}
+.floor-type{
+  width: 1%;
+  text-align: center;
+}
+.floor-staff{
+  width:3%;
+}
+.btn-floor{
+  width:2%;
+}
+.floor-staff input[type=text]{
+  width: 86%;
+  height: 18px;
+  text-align: center;
+}
+
 #uploadBtn1, #uploadBtn2{
   float: right;
   margin-top: 10px;
