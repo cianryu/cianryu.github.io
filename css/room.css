@@ -9,21 +9,21 @@ body {
   margin: 0 auto;
 }
 table {
-  width: 93.1%;
+  width: 99%;
   border-collapse: collapse;
   text-align: center;
-  margin-left: 5.5%;
-  font-size: small;
+  margin-left: 0.5%;
+  font-size: medium;
   height: 100%;
 }
 th, td {
-  height: 14px;
+  height: 16px;
   padding: 0;
 }
 
 .room input[type=text] {
   width: 85%;
-  font-size: x-small;
+  font-size: small;
   text-align: center;
   height: 65%;
   border: none;
@@ -46,7 +46,7 @@ th, td {
   height: 90%
 }
 .report{
-  margin-top: 30px;
+  margin-top: 5px;
   border-bottom: 0px;
   font-size: 16px;
   height: 30px;
@@ -90,11 +90,12 @@ th, td {
 .roomType{
   border: 1px solid #444444;
   width: 1.6%;
+  font-weight: bold;
 }
 .staffNm{
   border: 1px solid #444444;
   width: 4.2%;
-  font-size: x-small;
+  font-size: small;
 }
 .floor{
   border: 2px solid #444444;
