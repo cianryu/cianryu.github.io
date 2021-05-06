@@ -2,6 +2,33 @@ let fileCnt = 0;
 let vCnt = 0;
 let cCnt = 0;
 let ooCnt = 0;
+
+const a_type = ["3A"
+              , "4A"
+              , "5A"
+              , "6A"
+              , "7A"
+              , "8A"
+              , "9A"
+              , "10A"
+              , "11A"
+              , "12A"
+              , "14A"
+              , "15A"
+              , "16A"]
+
+const b_type = ["4B"
+              , "5B"
+              , "6B"
+              , "7B"
+              , "8B"
+              , "9B"
+              , "10B"
+              , "11B"
+              , "12B"
+              , "14B"
+              , "15B"]
+
 window.addEventListener("load", function(event) {
   let current = new Date();
   let year = current.getFullYear();
@@ -182,8 +209,7 @@ function currentDate(){
 }
 
 function printPage(){
-  console.log(1);
-  var initBody;
+  /*var initBody;
   window.onbeforeprint = function(){
    initBody = document.body.innerHTML;
    document.body.innerHTML =  document.getElementById('content').innerHTML;
@@ -192,5 +218,35 @@ function printPage(){
    document.body.innerHTML = initBody;
   };
   window.print();
-  return false;
+  return false;*/
+
+  var initBody = document.body.innerHTML;
+  window.onbeforeprint = function(){
+    document.body.innerHTML = document.getElementById('content').innerHTML;
+  }
+  window.onafterprint = function(){
+    document.body.innerHTML = initBody;
+  }
+  window.print();     
+}
+
+function fn_floor_staff(){
+  for(let i in a_type){
+    var aStaff = document.getElementById(a_type[i]).value;
+    if(aStaff != null && aStaff != ""){
+      var aRStaff = document.getElementsByClassName("staff"+a_type[i]);
+      for(var j in aRStaff){
+        aRStaff[j].value = aStaff;
+      }
+    }
+  }
+  for(i in b_type){
+    var bStaff = document.getElementById(b_type[i]).value;
+    if(bStaff != null && bStaff != ""){
+      var bRStaff = document.getElementsByClassName("staff"+b_type[i]);
+      for(var j in bRStaff){
+        bRStaff[j].value = bStaff;
+      }
+    }
+  }
 }
