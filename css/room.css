@@ -41,6 +41,11 @@ th, td {
 #content{
   margin:0 auto;  
 }
+
+#content_print{
+  display:none;
+  margin:0 auto;  
+}
 .room{
   border: 2px solid #444444;
   height: 90%

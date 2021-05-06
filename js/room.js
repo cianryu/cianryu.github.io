@@ -209,17 +209,8 @@ function currentDate(){
 }
 
 function printPage(){
-  /*var initBody;
-  window.onbeforeprint = function(){
-   initBody = document.body.innerHTML;
-   document.body.innerHTML =  document.getElementById('content').innerHTML;
-  };
-  window.onafterprint = function(){
-   document.body.innerHTML = initBody;
-  };
-  window.print();
-  return false;*/
-
+  printSetData();
+  
   var initBody = document.body.innerHTML;
   window.onbeforeprint = function(){
     document.body.innerHTML = document.getElementById('content').innerHTML;
@@ -227,7 +218,10 @@ function printPage(){
   window.onafterprint = function(){
     document.body.innerHTML = initBody;
   }
-  window.print();     
+  window.print(); 
+
+  printDelData();
+  
 }
 
 function fn_floor_staff(){
@@ -246,6 +240,58 @@ function fn_floor_staff(){
       var bRStaff = document.getElementsByClassName("staff"+b_type[i]);
       for(var j in bRStaff){
         bRStaff[j].value = bStaff;
+      }
+    }
+  }
+}
+
+function printSetData(){
+  totalRoomChk();
+}
+
+function totalRoomChk(type){
+  let startRoomNo = 1;
+  let endRoomNo = 31;
+  let floorNo = "";
+  let roomNo = "";
+  for(var i = 3 ; i <= 16 ; i++){
+    if(i == 13){
+      continue;
+    }
+    switch (i) {
+      case 3 : 
+        startRoomNo = 5;
+        endRoomNo = 22;
+        break;
+      case 4 : 
+        endRoomNo = 34;
+        break;
+      case 5 : 
+        endRoomNo = 35;
+        break;
+      case 16 : 
+        endRoomNo = 6;
+        break;
+    default:
+      startRoomNo = 1;
+      endRoomNo = 31;
+      break;
+    }
+    if(i < 10){
+      floorNo = "0" + i;
+    }else{
+      floorNo = i;
+    }
+    for(var j = startRoomNo ; j <= endRoomNo ; j++){
+      if(j < 10){
+        roomNo = floorNo + "0" + j;
+      }else{
+        roomNo = floorNo + "" + j;
+      }
+      var roomSId_input = document.getElementById("u_"+ roomNo).firstElementChild;
+      if(roomSId_input != null && roomSId_input != "") {
+        console.log("u_"+ roomNo + " : " + roomSId_input.value);
+        roomSId_input.parentElement.innerHTML = roomSId_input.value;
       }
     }
   }
