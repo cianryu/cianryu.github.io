@@ -33,7 +33,7 @@ function readExcel1() {
         }), {});
       });
       datas.forEach(row => {
-        if(testDt == row.OrgDepDate){
+        //if(testDt == row.OrgDepDate){
           var roomSId = document.getElementById("s_"+row.RmNo);
           if(roomSId != null){
             roomSId.innerHTML = "C";
@@ -41,7 +41,8 @@ function readExcel1() {
             ++cCnt;
           }
         }
-      });
+      //}
+      );
     });
   };
   reader.readAsBinaryString(input.files[0]);
