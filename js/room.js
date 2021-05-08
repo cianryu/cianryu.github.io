@@ -1,7 +1,9 @@
 let fileCnt = 0;
 let vCnt = 0;
 let cCnt = 0;
+let oCnt = 0;
 let ooCnt = 0;
+let totalCnt = 0;
 
 const a_type = ["3A"
               , "4A"
@@ -16,6 +18,7 @@ const a_type = ["3A"
               , "14A"
               , "15A"
               , "16A"]
+let a_staff = []
 
 const b_type = ["4B"
               , "5B"
@@ -28,6 +31,7 @@ const b_type = ["4B"
               , "12B"
               , "14B"
               , "15B"]
+let b_staff = []
 
 window.addEventListener("load", function(event) {
   let current = new Date();
@@ -70,6 +74,8 @@ function readExcel1() {
         }
       //}
       );
+      document.getElementById("total_c").innerHTML = cCnt;
+      fn_totalCnt();
     });
   };
   reader.readAsBinaryString(input.files[0]);
@@ -97,7 +103,7 @@ function readExcel2() {
       datas.forEach(row => {
         let roomStatus = "V";
         let color = "black";
-        let size = "small";
+        let size = "medium";
         if((row.RoomStatus == "Vacant" && row.CleanStatus == "Cleaned")){
           delete row.RoomStatus;
           delete row.CleanStatus;
@@ -115,7 +121,7 @@ function readExcel2() {
         if(row.RoomStatus == "Out Of Order"){
           roomStatus = "O.O"
           color = "red";
-          size="xx-small";
+          size="x-small";
           delete row.RoomStatus;
           delete row.CleanStatus;
           for(key in row){
@@ -126,13 +132,18 @@ function readExcel2() {
               roomSId.style.color=color;
               roomSId.style.fontSize=size;
               ++ooCnt;
+              console.log(ooCnt);
             }
           }
         }
+        document.getElementById("total_v").innerHTML = vCnt;
+        document.getElementById("total_oo").innerHTML = ooCnt;
+        fn_totalCnt();
       });
     });
   };
   reader.readAsBinaryString(input.files[0]);
+  
 }
 
 function reRoomCheck(){
@@ -157,9 +168,11 @@ function reRoomCheck(){
         endRoomNo = 22;
         break;
       case 4 : 
+        startRoomNo = 1;
         endRoomNo = 34;
         break;
       case 5 : 
+        startRoomNo = 1;
         endRoomNo = 35;
         break;
       case 16 : 
@@ -187,9 +200,17 @@ function reRoomCheck(){
       if(roomSId.innerHTML == "") {
         console.log(roomNo);
         roomSId.innerHTML = roomStatus;
+        ++oCnt;
       }
     }
   }
+  document.getElementById("total_o").innerHTML = oCnt;
+  fn_totalCnt();
+}
+
+function fn_totalCnt(){
+  totalCnt = vCnt + cCnt + oCnt + ooCnt;
+  document.getElementById("total").innerHTML = totalCnt;
 }
 
 function currentDate(){
@@ -218,10 +239,9 @@ function printPage(){
   window.onafterprint = function(){
     document.body.innerHTML = initBody;
   }
-  window.print(); 
-
-  printDelData();
-  
+  window.print();
+  totalRoomChk("update");
+  fn_floor_staff_re_set();
 }
 
 function fn_floor_staff(){
@@ -232,6 +252,7 @@ function fn_floor_staff(){
       for(var j in aRStaff){
         aRStaff[j].value = aStaff;
       }
+      a_staff[i] = aStaff;
     }
   }
   for(i in b_type){
@@ -241,12 +262,27 @@ function fn_floor_staff(){
       for(var j in bRStaff){
         bRStaff[j].value = bStaff;
       }
+      b_staff[i] = bStaff;
     }
   }
 }
 
+function fn_floor_staff_re_set(){
+  for(var i = 0 ; i < 13 ; i++){
+    if(a_staff[i] != null && a_staff[i] != undefined){
+      document.getElementById(a_type[i]).value = a_staff[i];
+    }
+  }
+  for(var i = 0 ; i < 11 ; i++){
+    if(b_staff[i] != null && b_staff[i] != undefined){
+      document.getElementById(b_type[i]).value = b_staff[i];
+    }
+      
+  }
+}
+
 function printSetData(){
-  totalRoomChk();
+  totalRoomChk("print");
 }
 
 function totalRoomChk(type){
@@ -254,6 +290,7 @@ function totalRoomChk(type){
   let endRoomNo = 31;
   let floorNo = "";
   let roomNo = "";
+  let input_html = "";
   for(var i = 3 ; i <= 16 ; i++){
     if(i == 13){
       continue;
@@ -264,9 +301,11 @@ function totalRoomChk(type){
         endRoomNo = 22;
         break;
       case 4 : 
+        startRoomNo = 1;
         endRoomNo = 34;
         break;
       case 5 : 
+        startRoomNo = 1;
         endRoomNo = 35;
         break;
       case 16 : 
@@ -288,11 +327,57 @@ function totalRoomChk(type){
       }else{
         roomNo = floorNo + "" + j;
       }
+
       var roomSId_input = document.getElementById("u_"+ roomNo).firstElementChild;
-      if(roomSId_input != null && roomSId_input != "") {
-        console.log("u_"+ roomNo + " : " + roomSId_input.value);
+      var roomSId = document.getElementById("u_"+ roomNo);
+      if(type == "update" && roomSId != null && roomSId != "") {
+        input_html = fn_set_input(i, j);
+        
+        var roomSId_text = roomSId.innerHTML;
+        roomSId.innerHTML = input_html;
+        roomSId.firstElementChild.value = roomSId_text;
+      }else if(type == "print" && roomSId_input != null && roomSId_input != "") {
         roomSId_input.parentElement.innerHTML = roomSId_input.value;
       }
     }
   }
+}
+
+function fn_set_input(i, j){
+  switch (i) {
+    case 3 : 
+      input_html = '<input type="text" class="staff'+i+'A" value=""/>'
+      break;
+    case 4 : 
+      if((j > 5 && j < 11) || (j > 21 && j < 28)){
+        input_html = '<input type="text" class="staff'+i+'A" value=""/>'
+      }else if(j > 10 && j < 22){
+        input_html = '<input type="text" class="staff'+i+'B" value=""/>'
+      }else{
+        input_html = '<input type="text" value=""/>';
+      }
+      break;
+    case 5 : 
+      if((j > 5 && j < 11) || (j > 22 && j < 29)){
+        input_html = '<input type="text" class="staff'+i+'A" value=""/>'
+      }else if(j > 10 && j < 23){
+        input_html = '<input type="text" class="staff'+i+'B" value=""/>'
+      }else{
+        input_html = '<input type="text" value=""/>';
+      }
+      break;
+    case 16 : 
+      input_html = '<input type="text" class="staff'+i+'A" value=""/>'
+      break;
+  default:
+    if((j > 5 && j < 11) || (j > 21 && j < 27)){
+      input_html = '<input type="text" class="staff'+i+'A" value=""/>'
+    }else if(j > 10 && j < 22){
+      input_html = '<input type="text" class="staff'+i+'B" value=""/>'
+    }else{
+      input_html = '<input type="text" value=""/>';
+    }
+    break;
+  }
+  return input_html;
 }

@@ -23,7 +23,7 @@ th, td {
 
 .room input[type=text] {
   width: 85%;
-  font-size: small;
+  font-size: medium;
   text-align: center;
   height: 65%;
   border: none;
@@ -41,7 +41,9 @@ th, td {
 #content{
   margin:0 auto;  
 }
-
+.footer{
+  margin-bottom: 20px;
+}
 #content_print{
   display:none;
   margin:0 auto;  
@@ -100,7 +102,7 @@ th, td {
 .staffNm{
   border: 1px solid #444444;
   width: 4.2%;
-  font-size: small;
+  font-size: medium;
 }
 .floor{
   border: 2px solid #444444;
@@ -172,6 +174,12 @@ th, td {
   height: 27px;
 }
 #print{
+  margin-top: 10px;
+  margin-right: 0px;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+#update{
   margin-top: 10px;
   margin-right: 0px;
   margin-bottom: 10px;
