@@ -185,3 +185,16 @@ th, td {
   margin-bottom: 10px;
   font-size: 16px;
 }
+#notCleaning{
+  margin-top: 10px;
+  margin-right: 0px;
+  margin-left: 10px; 
+  margin-bottom: 10px;
+  font-size: 16px;
+  height: 28px;
+}
+@media print{
+  .target {
+    -webkit-print-color-adjust: exact !important;
+  }
+}
