@@ -40,7 +40,20 @@ window.addEventListener("load", function(event) {
   let day = current.getDate();
   let currentDt = year + "년 " + month + "월 " + day + "일";
   document.getElementById("currentDt").innerHTML = currentDt;
+
+  var roomType = document.getElementsByClassName("roomType");
+  console.log(roomType);
+  for(var i = 0 ; i < roomType.length ; i++){
+    roomType[i].addEventListener("click", fn_change_roomType);
+  }
 });
+
+function fn_change_roomType(){
+  alert(this.roomType.innerHTML);
+  if(roomType.innerHTML != undefined){
+    console.log("2 : " + roomType.innerHTML);
+  }
+}
 
 function readExcel1() {
   let currentDt = currentDate();
