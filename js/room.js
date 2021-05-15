@@ -454,10 +454,10 @@ function fn_change_room_type(){
 
 function fn_notCleaning(){
   notCleaning = 0;
-  if(totalCnt != 372){
+  /*if(totalCnt != 372){
     alert("Occupied 처리를 해주시기 바랍니다.");
     return;
-  }
+  }*/
   let startRoomNo = 1;
   let endRoomNo = 31;
   let floorNo = "";
