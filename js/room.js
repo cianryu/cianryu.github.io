@@ -1,4 +1,5 @@
 let fileCnt = 0;
+let notCleaning = 0;
 let vCnt = 0;
 let cCnt = 0;
 let oCnt = 0;
@@ -33,6 +34,13 @@ const b_type = ["4B"
               , "15B"]
 let b_staff = []
 
+let roomTypeList = ["V"
+                  , "C"
+                  , "O"
+                  , "O.O"
+]
+
+
 window.addEventListener("load", function(event) {
   let current = new Date();
   let year = current.getFullYear();
@@ -41,19 +49,12 @@ window.addEventListener("load", function(event) {
   let currentDt = year + "년 " + month + "월 " + day + "일";
   document.getElementById("currentDt").innerHTML = currentDt;
 
-  var roomType = document.getElementsByClassName("roomType");
-  console.log(roomType);
-  for(var i = 0 ; i < roomType.length ; i++){
-    roomType[i].addEventListener("click", fn_change_roomType);
+  let roomTypeAll = document.getElementsByClassName("roomType");
+  for(var i = 0 ; i < roomTypeAll.length ; i++){
+    roomTypeAll[i].addEventListener("click", fn_change_room_type, false);
   }
 });
 
-function fn_change_roomType(){
-  alert(this.roomType.innerHTML);
-  if(roomType.innerHTML != undefined){
-    console.log("2 : " + roomType.innerHTML);
-  }
-}
 
 function readExcel1() {
   let currentDt = currentDate();
@@ -87,7 +88,6 @@ function readExcel1() {
         }
       //}
       );
-      document.getElementById("total_c").innerHTML = cCnt;
       fn_totalCnt();
     });
   };
@@ -134,7 +134,7 @@ function readExcel2() {
         if(row.RoomStatus == "Out Of Order"){
           roomStatus = "O.O"
           color = "red";
-          size="x-small";
+          size="small";
           delete row.RoomStatus;
           delete row.CleanStatus;
           for(key in row){
@@ -145,12 +145,9 @@ function readExcel2() {
               roomSId.style.color=color;
               roomSId.style.fontSize=size;
               ++ooCnt;
-              console.log(ooCnt);
             }
           }
         }
-        document.getElementById("total_v").innerHTML = vCnt;
-        document.getElementById("total_oo").innerHTML = ooCnt;
         fn_totalCnt();
       });
     });
@@ -209,20 +206,21 @@ function reRoomCheck(){
         roomNo = floorNo + "" + j;
       }
       var roomSId = document.getElementById("s_"+ roomNo);
-      console.log(roomNo + ":" + roomSId.innerHTML);
       if(roomSId.innerHTML == "") {
-        console.log(roomNo);
         roomSId.innerHTML = roomStatus;
         ++oCnt;
       }
     }
   }
-  document.getElementById("total_o").innerHTML = oCnt;
   fn_totalCnt();
 }
 
 function fn_totalCnt(){
   totalCnt = vCnt + cCnt + oCnt + ooCnt;
+  document.getElementById("total_v").innerHTML = vCnt;
+  document.getElementById("total_c").innerHTML = cCnt;
+  document.getElementById("total_o").innerHTML = oCnt;
+  document.getElementById("total_oo").innerHTML = ooCnt;
   document.getElementById("total").innerHTML = totalCnt;
 }
 
@@ -260,23 +258,40 @@ function printPage(){
 function fn_floor_staff(){
   for(let i in a_type){
     var aStaff = document.getElementById(a_type[i]).value;
-    if(aStaff != null && aStaff != ""){
+    if(aStaff != undefined){
       var aRStaff = document.getElementsByClassName("staff"+a_type[i]);
-      for(var j in aRStaff){
-        aRStaff[j].value = aStaff;
+      let aRoomNoClass = "floor" + a_type[i];
+      let aRoomNo = document.getElementsByClassName(aRoomNoClass);
+      for(var j = 0 ; j < aRStaff.length ; j++){
+        if(aStaff == ""){
+          aRoomNo[j].style.backgroundColor = "#fbffad";
+        }else{
+          aRoomNo[j].style.backgroundColor = "";
+          aRStaff[j].value = aStaff;
+        }
       }
       a_staff[i] = aStaff;
     }
   }
   for(i in b_type){
     var bStaff = document.getElementById(b_type[i]).value;
-    if(bStaff != null && bStaff != ""){
+    if(bStaff != undefined){
       var bRStaff = document.getElementsByClassName("staff"+b_type[i]);
-      for(var j in bRStaff){
-        bRStaff[j].value = bStaff;
+      let bRoomNoClass = "floor" + b_type[i];
+      let bRoomNo = document.getElementsByClassName(bRoomNoClass);
+      for(var j = 0 ; j < bRStaff.length ; j++){
+        if(bStaff == ""){
+          bRoomNo[j].style.backgroundColor = "#fbffad";
+        }else{
+          bRoomNo[j].style.backgroundColor = "";
+          bRStaff[j].value = bStaff;
+        }
       }
       b_staff[i] = bStaff;
     }
+  }
+  if(totalCnt == 372){
+    fn_notCleaning();
   }
 }
 
@@ -290,7 +305,6 @@ function fn_floor_staff_re_set(){
     if(b_staff[i] != null && b_staff[i] != undefined){
       document.getElementById(b_type[i]).value = b_staff[i];
     }
-      
   }
 }
 
@@ -393,4 +407,110 @@ function fn_set_input(i, j){
     break;
   }
   return input_html;
+}
+
+function fn_change_room_type(){
+  let roomType = this.innerHTML;
+  let nextRoomType;
+  switch (roomType) {
+    case roomTypeList[0] : 
+      this.style.color = "red";
+      nextRoomType = roomTypeList[1];
+      vCnt--;
+      cCnt++;
+      break;
+    case roomTypeList[1] : 
+      this.style.color = "black";
+      nextRoomType = roomTypeList[2];
+      cCnt--;
+      oCnt++;
+      break;
+    case roomTypeList[2] :
+      this.style.color = "red";
+      this.style.fontSize = "small";
+      nextRoomType = roomTypeList[3];
+      oCnt--;
+      ooCnt++;
+      break;
+    case roomTypeList[3] : 
+      this.style.color = "black";
+      this.style.fontSize = "medium";
+      nextRoomType = roomTypeList[0];
+      ooCnt--;
+      vCnt++;
+      break;
+    case "" : 
+      this.style.color = "black";
+      nextRoomType = roomTypeList[0];
+      vCnt++;
+      break;
+  }
+  this.innerHTML = nextRoomType;
+  fn_totalCnt();
+  if(totalCnt == 372){
+    fn_notCleaning();
+  }
+}
+
+function fn_notCleaning(){
+  notCleaning = 0;
+  if(totalCnt != 372){
+    alert("Occupied 처리를 해주시기 바랍니다.");
+    return;
+  }
+  let startRoomNo = 1;
+  let endRoomNo = 31;
+  let floorNo = "";
+  let roomNo = "";
+  for(var i = 3 ; i <= 16 ; i++){
+    if(i == 13){
+      continue;
+    }
+    switch (i) {
+      case 3 : 
+        startRoomNo = 5;
+        endRoomNo = 22;
+        break;
+      case 4 : 
+        startRoomNo = 1;
+        endRoomNo = 34;
+        break;
+      case 5 : 
+        startRoomNo = 1;
+        endRoomNo = 35;
+        break;
+      case 16 : 
+        endRoomNo = 6;
+        break;
+    default:
+      startRoomNo = 1;
+      endRoomNo = 31;
+      break;
+    }
+    if(i < 10){
+      floorNo = "0" + i;
+    }else{
+      floorNo = i;
+    }
+    let roomStatus = "O";
+    for(var j = startRoomNo ; j <= endRoomNo ; j++){
+      if(j < 10){
+        roomNo = floorNo + "0" + j;
+      }else{
+        roomNo = floorNo + "" + j;
+      }
+      var roomSId = document.getElementById("s_" + roomNo);
+      var staffNm = document.getElementById("u_" + roomNo).firstElementChild.value;
+      console.log(roomNo);
+      console.log(document.getElementById("u_" + roomNo).firstElementChild.innerHTML);
+      if((roomSId.innerHTML == "C" || roomSId.innerHTML == "O") &&
+          staffNm == "") {
+        roomSId.style.backgroundColor = "#fca8ff";
+        notCleaning++;
+      }else{
+        roomSId.style.backgroundColor = "";
+      }
+    }
+  }
+  document.getElementById("notCleaningCnt").innerHTML = notCleaning;
 }
