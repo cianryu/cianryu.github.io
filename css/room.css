@@ -20,6 +20,7 @@ th, td {
   height: 16px;
   padding: 0;
 }
+input:focus {outline:none;}
 
 .room input[type=text] {
   width: 85%;
@@ -32,6 +33,22 @@ th, td {
   border-left: 0px; 
   border-bottom: 0px;
 }
+.report input[type=text]{
+  width: 91%;
+  height: 100%;
+  font-size: large;
+  text-align: center;
+  border: none;
+  border-right: 0px; 
+  border-top: 0px; 
+  border-left: 0px; 
+  border-bottom: 0px;
+  padding: 0;
+  
+}
+
+
+
 .container{
   width: 100%;
 }
@@ -53,30 +70,37 @@ th, td {
   height: 90%
 }
 .report{
-  margin-top: 30px;
+  margin-top: 7px;
+  margin-bottom: 4px;
   border-bottom: 0px;
   font-size: 16px;
-  height: 30px;
+  height: 28px;
   font-weight: bold;
   width: 93.1%;
 }
 .report > tbody > tr > td:first-child{
-  width: 13.1%;
+  width: 15%;
 }
 .report > tbody > tr > td:nth-child(2){
-  width: 40%;
-}
-.report > tbody > tr > td:nth-child(3)
-, .report > tbody > tr > td:nth-child(5){
-  width: 12.5%;
+  width: 10%;
 }
 .report > tbody > tr > td:nth-child(4){
-  width: 7.5%;
+  width: 30%;
+}
+.report > tbody > tr > td:nth-child(5)
+, .report > tbody > tr > td:nth-child(7){
+  width: 12.5%;
 }
 .report > tbody > tr > td:nth-child(6){
-  width: 5%;
+  width: 7.5%;
 }
-.report > tbody > tr > td:nth-child(7){
+.report > tbody > tr > td:nth-child(3)
+, .report > tbody > tr > td:nth-child(8){
+  width: 7.5%;
+  border-bottom: 2px solid #444444;
+  margin : 0 auto;
+}
+.report > tbody > tr > td:nth-child(9){
   width: 2.5%;
 }
 .memo{
