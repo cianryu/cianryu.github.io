@@ -1,3 +1,7 @@
+const current = new Date();
+let year = current.getFullYear();
+let month = current.getMonth()+1;
+let day = current.getDate();
 let fileCnt = 0;
 let notCleaning = 0;
 let vCnt = 0;
@@ -6,6 +10,7 @@ let oCnt = 0;
 let ooCnt = 0;
 let totalCnt = 0;
 let sCnt = 0;
+let errorCnt = 0;
 
 const a_type = ["3A"
               , "4A"
@@ -43,13 +48,15 @@ let roomTypeList = ["V"
 
 
 window.addEventListener("load", function(event) {
-  let current = new Date();
-  let year = current.getFullYear();
-  let month = current.getMonth()+1;
-  let day = current.getDate();
+  if(month < 10){
+    month = "0" + month;
+  }
+  if(day < 10){
+    day = "0" + day;
+  }
   let currentDt = year + "년 " + month + "월 " + day + "일";
   document.getElementById("currentDt").innerHTML = currentDt;
-
+  
   let roomTypeAll = document.getElementsByClassName("roomType");
   for(var i = 0 ; i < roomTypeAll.length ; i++){
     roomTypeAll[i].addEventListener("click", fn_change_room_type, false);
@@ -60,19 +67,22 @@ window.addEventListener("load", function(event) {
 function readExcel1() {
   if(sCnt < 1){
     alert("Summary를 업로드 후 진행해주시지 바랍니다.");
+    document.getElementById("uploadBtn1").value = "";
     return false;
   }
-  let currentDt = currentDate();
-  let testDt = "02/28/2021";
-  console.log(currentDt);
+  
+  let dCurrentDt = month + "/" + day + "/" + year
+  console.log(dCurrentDt);
   let input = event.target;
   let reader = new FileReader();
   reader.onload = function () {
     let data = reader.result;
     let workBook = XLSX.read(data, { type: 'binary' });
     workBook.SheetNames.forEach(function (sheetName) {
-      if(sheetName.split(" ")[1] != "Departure"){
+      if(sheetName.split(" ")[1] != "Departure" && errorCnt == 0){
         alert("Departure 문서가 아닙니다.");
+        document.getElementById("uploadBtn1").value = "";
+        ++errorCnt;
         return false;
       }
       let rows = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName]);
@@ -83,18 +93,30 @@ function readExcel1() {
         }), {});
       });
       datas.forEach(row => {
-        //if(testDt == row.OrgDepDate){
+        if(row.DepDate != "" && errorCnt == 0){
+          if(dCurrentDt != row.DepDate){
+            alert("오늘 일자 Departure 문서가 아닙니다.");
+            document.getElementById("uploadBtn1").value = "";
+            errorCnt++;
+            console.log(errorCnt);
+            return false;
+          }
           var roomSId = document.getElementById("s_"+row.RmNo);
-          if(roomSId != null && roomSId.innerHTML == ""){
+          if(roomSId != null && roomSId.innerHTML != "C"){
             roomSId.innerHTML = "C";
             roomSId.style.color = "red";
             ++cCnt;
+            if(roomSId.innerHTML == "V"){
+              --vCnt;
+            }else if(roomSId.innerHTML == "O.O"){
+              --ooCnt;
+            }
           }
         }
-      //}
-      );
+      });
       fn_totalCnt();
     });
+    errorCnt = 0;
   };
   ++sCnt;
   reader.readAsBinaryString(input.files[0]);
@@ -107,10 +129,18 @@ function readExcel2() {
     let data = reader.result;
     let workBook = XLSX.read(data, { type: 'binary' });
     workBook.SheetNames.forEach(function (sheetName) {
+      let sheetVal = document.getElementById("uploadBtn2").value;
+      
       if(sheetName.split(" ")[2] != "Summary"){
         alert("Summary 문서가 아닙니다.");
+        document.getElementById("uploadBtn2").value = "";
+        return false;
+      }else if(sheetVal.split("_")[1] != currentDt){
+        alert("오늘 일자 Summary 문서가 아닙니다.");
+        document.getElementById("uploadBtn2").value = "";
         return false;
       }
+      
       let rows = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName]);
       const datas = rows.map(parent => {
         return Object.keys(parent).reduce((acc, key) => ({
@@ -139,7 +169,11 @@ function readExcel2() {
               roomSId.innerHTML = roomStatus;
               roomSId.style.color=color;
               roomSId.style.fontSize=size;
-              ++vCnt;
+              if(roomStatus == "V"){
+                ++vCnt;
+              }else if(roomStatus == "C"){
+                ++cCnt;
+              }
             }
           }
         }else if(row.RoomStatus == "Out Of Order"){
@@ -268,12 +302,12 @@ function printPage(){
 }
 
 function fn_floor_staff(){
-  /*
+  
   if(sCnt < 3){
     alert("Occupied 처리 후 진행해 주시기 바랍니다.");
     return;
   }
-  */
+  
   for(let i in a_type){
     var aStaff = document.getElementById(a_type[i]).value.replaceAll(" ","");
     document.getElementById(a_type[i]).value = aStaff;
