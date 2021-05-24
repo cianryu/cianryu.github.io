@@ -10,7 +10,6 @@ let oCnt = 0;
 let ooCnt = 0;
 let totalCnt = 0;
 let sCnt = 0;
-let errorCnt = 0;
 
 const a_type = ["3A"
               , "4A"
@@ -44,6 +43,7 @@ let roomTypeList = ["V"
                   , "C"
                   , "O"
                   , "O.O"
+                  , "ⓥ"
 ]
 
 
@@ -72,19 +72,12 @@ function readExcel1() {
   }
   
   let dCurrentDt = month + "/" + day + "/" + year
-  console.log(dCurrentDt);
   let input = event.target;
   let reader = new FileReader();
   reader.onload = function () {
     let data = reader.result;
     let workBook = XLSX.read(data, { type: 'binary' });
     workBook.SheetNames.forEach(function (sheetName) {
-      if(sheetName.split(" ")[1] != "Departure" && errorCnt == 0){
-        alert("Departure 문서가 아닙니다.");
-        document.getElementById("uploadBtn1").value = "";
-        ++errorCnt;
-        return false;
-      }
       let rows = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName]);
       const datas = rows.map(parent => {
         return Object.keys(parent).reduce((acc, key) => ({
@@ -92,17 +85,21 @@ function readExcel1() {
           [key.replace(/\s/g, "")]: parent[key],
         }), {});
       });
+      if(sheetName.split(" ")[1] != "Departure" && datas.length > 1){
+        alert("Departure 문서가 아닙니다.");
+        document.getElementById("uploadBtn1").value = "";
+        return false;
+      }
+      if(datas[0].DepDate != dCurrentDt && datas.length > 1){
+        alert("오늘 일자 Departure 문서가 아닙니다.");
+        document.getElementById("uploadBtn1").value = "";
+        return false;
+      }
       datas.forEach(row => {
-        if(row.DepDate != "" && errorCnt == 0){
-          if(dCurrentDt != row.DepDate){
-            alert("오늘 일자 Departure 문서가 아닙니다.");
-            document.getElementById("uploadBtn1").value = "";
-            errorCnt++;
-            console.log(errorCnt);
-            return false;
-          }
+        let depDate = row.DepDate.replace(" ","");
+        if(depDate != ""){
           var roomSId = document.getElementById("s_"+row.RmNo);
-          if(roomSId != null && roomSId.innerHTML != "C"){
+          if(roomSId != null && (roomSId.innerHTML != "C" || roomSId.innerHTML != "ⓥ")){
             roomSId.innerHTML = "C";
             roomSId.style.color = "red";
             ++cCnt;
@@ -116,7 +113,6 @@ function readExcel1() {
       });
       fn_totalCnt();
     });
-    errorCnt = 0;
   };
   ++sCnt;
   reader.readAsBinaryString(input.files[0]);
@@ -125,17 +121,19 @@ function readExcel1() {
 function readExcel2() {
   let input = event.target;
   let reader = new FileReader();
+  let sCurrentDt = year + "" + month + "" + day;
+  console.log(sCurrentDt);
   reader.onload = function () {
     let data = reader.result;
     let workBook = XLSX.read(data, { type: 'binary' });
     workBook.SheetNames.forEach(function (sheetName) {
       let sheetVal = document.getElementById("uploadBtn2").value;
-      
+      console.log(sheetVal.split("_")[1].split(".")[0]);
       if(sheetName.split(" ")[2] != "Summary"){
         alert("Summary 문서가 아닙니다.");
         document.getElementById("uploadBtn2").value = "";
         return false;
-      }else if(sheetVal.split("_")[1] != currentDt){
+      }else if(sheetVal.split("_")[1].split(".")[0] != sCurrentDt){
         alert("오늘 일자 Summary 문서가 아닙니다.");
         document.getElementById("uploadBtn2").value = "";
         return false;
@@ -155,10 +153,12 @@ function readExcel2() {
         let size = "medium";
         if((row.RoomStatus == "Vacant")){
           if(row.CleanStatus == "Cleaned"){
-            roomStatus = "V"
+            roomStatus = "V";
             color = "black";
+            size = "small";
           }else if(row.CleanStatus == "Dirty"){
-            roomStatus = "C"
+            roomStatus = "ⓥ";
+            size = "large";
           }
           delete row.RoomStatus;
           delete row.CleanStatus;
@@ -171,7 +171,7 @@ function readExcel2() {
               roomSId.style.fontSize=size;
               if(roomStatus == "V"){
                 ++vCnt;
-              }else if(roomStatus == "C"){
+              }else if(roomStatus == "C" || roomStatus == "ⓥ"){
                 ++cCnt;
               }
             }
@@ -268,22 +268,6 @@ function fn_totalCnt(){
   document.getElementById("total_o").innerHTML = oCnt;
   document.getElementById("total_oo").innerHTML = ooCnt;
   document.getElementById("total").innerHTML = totalCnt;
-}
-
-function currentDate(){
-  var date = new Date(); 
-  var year = date.getFullYear(); 
-  var month = new String(date.getMonth()+1); 
-  var day = new String(date.getDate()); 
-
-  if(month.length == 1){ 
-    month = "0" + month; 
-  } 
-  if(day.length == 1){ 
-    day = "0" + day; 
-  } 
-  var currentDt = day + "/" + month + "/" + year
-  return currentDt
 }
 
 function printPage(){
@@ -507,6 +491,7 @@ function fn_change_room_type(){
   switch (roomType) {
     case roomTypeList[0] : 
       this.style.color = "red";
+      this.style.fontSize = "medium";
       nextRoomType = roomTypeList[1];
       vCnt--;
       cCnt++;
@@ -525,8 +510,15 @@ function fn_change_room_type(){
       ooCnt++;
       break;
     case roomTypeList[3] : 
+      this.style.color = "red";
+      this.style.fontSize = "large";
+      nextRoomType = roomTypeList[4];
+      ooCnt--;
+      vCnt++;
+      break;
+    case roomTypeList[4] : 
       this.style.color = "black";
-      this.style.fontSize = "medium";
+      this.style.fontSize = "small";
       nextRoomType = roomTypeList[0];
       ooCnt--;
       vCnt++;
@@ -593,9 +585,9 @@ function fn_notCleaning(){
       }
       var roomSId = document.getElementById("s_" + roomNo);
       var staffNm = document.getElementById("u_" + roomNo).firstElementChild.value;
-      if((roomSId.innerHTML == "C" || roomSId.innerHTML == "O") &&
+      if((roomSId.innerHTML == "C" || roomSId.innerHTML == "ⓥ" || roomSId.innerHTML == "O") &&
           staffNm == "") {
-        roomSId.style.backgroundColor = "#fca8ff";
+        roomSId.style.backgroundColor = "#ffe3ff";
         notCleaning++;
       }else{
         roomSId.style.backgroundColor = "";
