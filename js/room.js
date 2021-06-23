@@ -1,3 +1,7 @@
+const current = new Date();
+let year = current.getFullYear();
+let month = current.getMonth()+1;
+let day = current.getDate();
 let fileCnt = 0;
 let notCleaning = 0;
 let vCnt = 0;
@@ -5,6 +9,7 @@ let cCnt = 0;
 let oCnt = 0;
 let ooCnt = 0;
 let totalCnt = 0;
+let sCnt = 0;
 
 const a_type = ["3A"
               , "4A"
@@ -51,17 +56,20 @@ let roomTypeList = ["V"
                   , "C"
                   , "O"
                   , "O.O"
+                  , "ⓥ"
 ]
 
 
 window.addEventListener("load", function(event) {
-  let current = new Date();
-  let year = current.getFullYear();
-  let month = current.getMonth()+1;
-  let day = current.getDate();
+  if(month < 10){
+    month = "0" + month;
+  }
+  if(day < 10){
+    day = "0" + day;
+  }
   let currentDt = year + "년 " + month + "월 " + day + "일";
   document.getElementById("currentDt").innerHTML = currentDt;
-
+  
   let roomTypeAll = document.getElementsByClassName("roomType");
   for(var i = 0 ; i < roomTypeAll.length ; i++){
     roomTypeAll[i].addEventListener("click", fn_change_room_type, false);
@@ -70,19 +78,19 @@ window.addEventListener("load", function(event) {
 
 
 function readExcel1() {
-  let currentDt = currentDate();
-  let testDt = "02/28/2021";
-  console.log(currentDt);
+  if(sCnt < 1){
+    alert("Summary를 업로드 후 진행해주시지 바랍니다.");
+    document.getElementById("uploadBtn1").value = "";
+    return false;
+  }
+  
+  let dCurrentDt = month + "/" + day + "/" + year
   let input = event.target;
   let reader = new FileReader();
   reader.onload = function () {
     let data = reader.result;
     let workBook = XLSX.read(data, { type: 'binary' });
     workBook.SheetNames.forEach(function (sheetName) {
-      if(sheetName.split(" ")[1] != "Departure"){
-        alert("Departure 문서가 아닙니다.");
-        return false;
-      }
       let rows = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName]);
       const datas = rows.map(parent => {
         return Object.keys(parent).reduce((acc, key) => ({
@@ -90,34 +98,60 @@ function readExcel1() {
           [key.replace(/\s/g, "")]: parent[key],
         }), {});
       });
+      if(sheetName.split(" ")[1] != "Departure" && datas.length > 1){
+        alert("Departure 문서가 아닙니다.");
+        document.getElementById("uploadBtn1").value = "";
+        return false;
+      }
+      if(datas[0].DepDate != dCurrentDt && datas.length > 1){
+        alert("오늘 일자 Departure 문서가 아닙니다.");
+        document.getElementById("uploadBtn1").value = "";
+        return false;
+      }
       datas.forEach(row => {
-        //if(testDt == row.OrgDepDate){
+        let depDate = row.DepDate.replace(" ","");
+        if(depDate != ""){
           var roomSId = document.getElementById("s_"+row.RmNo);
-          if(roomSId != null){
+          if(roomSId != null && (roomSId.innerHTML != "C" || roomSId.innerHTML != "ⓥ")){
             roomSId.innerHTML = "C";
             roomSId.style.color = "red";
             ++cCnt;
+            if(roomSId.innerHTML == "V"){
+              --vCnt;
+            }else if(roomSId.innerHTML == "O.O"){
+              --ooCnt;
+            }
           }
         }
-      //}
-      );
+      });
       fn_totalCnt();
     });
   };
+  ++sCnt;
   reader.readAsBinaryString(input.files[0]);
 }
 
 function readExcel2() {
   let input = event.target;
   let reader = new FileReader();
+  let sCurrentDt = year + "" + month + "" + day;
+  console.log(sCurrentDt);
   reader.onload = function () {
     let data = reader.result;
     let workBook = XLSX.read(data, { type: 'binary' });
     workBook.SheetNames.forEach(function (sheetName) {
+      let sheetVal = document.getElementById("uploadBtn2").value;
+      console.log(sheetVal.split("_")[1].split(".")[0]);
       if(sheetName.split(" ")[2] != "Summary"){
         alert("Summary 문서가 아닙니다.");
+        document.getElementById("uploadBtn2").value = "";
+        return false;
+      }else if(sheetVal.split("_")[1].split(".")[0] != sCurrentDt){
+        alert("오늘 일자 Summary 문서가 아닙니다.");
+        document.getElementById("uploadBtn2").value = "";
         return false;
       }
+      
       let rows = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName]);
       const datas = rows.map(parent => {
         return Object.keys(parent).reduce((acc, key) => ({
@@ -127,26 +161,36 @@ function readExcel2() {
       });
 
       datas.forEach(row => {
-        let roomStatus = "V";
-        let color = "black";
+        let roomStatus = "";
+        let color = "red";
         let size = "medium";
-        if((row.RoomStatus == "Vacant" && row.CleanStatus == "Cleaned")){
+        if((row.RoomStatus == "Vacant")){
+          if(row.CleanStatus == "Cleaned"){
+            roomStatus = "V";
+            color = "black";
+            size = "small";
+          }else if(row.CleanStatus == "Dirty"){
+            roomStatus = "ⓥ";
+            size = "large";
+          }
           delete row.RoomStatus;
           delete row.CleanStatus;
           for(key in row){
             var roomNo = row[key].split(" ")[0];
             var roomSId = document.getElementById("s_"+roomNo);
-            if(roomSId != null){
+            if(roomSId != null && roomSId.innerHTML == ""){
               roomSId.innerHTML = roomStatus;
               roomSId.style.color=color;
               roomSId.style.fontSize=size;
-              ++vCnt;
+              if(roomStatus == "V"){
+                ++vCnt;
+              }else if(roomStatus == "C" || roomStatus == "ⓥ"){
+                ++cCnt;
+              }
             }
           }
-        }
-        if(row.RoomStatus == "Out Of Order"){
+        }else if(row.RoomStatus == "Out Of Order"){
           roomStatus = "O.O"
-          color = "red";
           size="small";
           delete row.RoomStatus;
           delete row.CleanStatus;
@@ -165,15 +209,16 @@ function readExcel2() {
       });
     });
   };
+  ++sCnt;
   reader.readAsBinaryString(input.files[0]);
   
 }
 
 function reRoomCheck(){
-  if(vCnt == 0){
+  if(sCnt == 0){
     alert("Summary를 업로드 후 진행해주시지 바랍니다.");
     return;
-  }else if(cCnt == 0){
+  }else if(sCnt == 1){
     alert("Departure를 업로드 후 진행해주시지 바랍니다.");
     return;
   }
@@ -225,6 +270,7 @@ function reRoomCheck(){
       }
     }
   }
+  ++sCnt
   fn_totalCnt();
 }
 
@@ -235,22 +281,6 @@ function fn_totalCnt(){
   document.getElementById("total_o").innerHTML = oCnt;
   document.getElementById("total_oo").innerHTML = ooCnt;
   document.getElementById("total").innerHTML = totalCnt;
-}
-
-function currentDate(){
-  var date = new Date(); 
-  var year = date.getFullYear(); 
-  var month = new String(date.getMonth()+1); 
-  var day = new String(date.getDate()); 
-
-  if(month.length == 1){ 
-    month = "0" + month; 
-  } 
-  if(day.length == 1){ 
-    day = "0" + day; 
-  } 
-  var currentDt = day + "/" + month + "/" + year
-  return currentDt
 }
 
 function printPage(){
@@ -269,8 +299,15 @@ function printPage(){
 }
 
 function fn_floor_staff(){
+  
+  if(sCnt < 3){
+    alert("Occupied 처리 후 진행해 주시기 바랍니다.");
+    return;
+  }
+  
   for(let i in a_type){
-    var aStaff = document.getElementById(a_type[i]).value;
+    var aStaff = document.getElementById(a_type[i]).value.replaceAll(" ","");
+    document.getElementById(a_type[i]).value = aStaff;
     if(aStaff != undefined){
       var aRStaff = document.getElementsByClassName("staff"+a_type[i]);
       let aRoomNoClass = "floor" + a_type[i];
@@ -287,7 +324,8 @@ function fn_floor_staff(){
     }
   }
   for(i in b_type){
-    var bStaff = document.getElementById(b_type[i]).value;
+    var bStaff = document.getElementById(b_type[i]).value.replaceAll(" ","");
+    document.getElementById(b_type[i]).value = bStaff;
     if(bStaff != undefined){
       var bRStaff = document.getElementsByClassName("staff"+b_type[i]);
       let bRoomNoClass = "floor" + b_type[i];
@@ -353,6 +391,9 @@ function totalRoomChk(type){
   let floorNo = "";
   let roomNo = "";
   let input_html = "";
+
+  fn_set_report(type);
+
   for(var i = 3 ; i <= 16 ; i++){
     if(i == 13){
       continue;
@@ -392,6 +433,7 @@ function totalRoomChk(type){
 
       var roomSId_input = document.getElementById("u_"+ roomNo).firstElementChild;
       var roomSId = document.getElementById("u_"+ roomNo);
+
       if(type == "update" && roomSId != null && roomSId != "") {
         input_html = fn_set_input(i, j);
         
@@ -399,14 +441,48 @@ function totalRoomChk(type){
         roomSId.innerHTML = input_html;
         roomSId.firstElementChild.value = roomSId_text;
       }else if(type == "print" && roomSId_input != null && roomSId_input != "") {
-        roomSId_input.parentElement.innerHTML = roomSId_input.value;
+        var roomVal = roomSId_input.value.replaceAll(" ", "");
+        roomSId_input.parentElement.innerHTML = roomVal;
       }
+    }
+  }
+}
+
+function fn_set_report(type){
+  let nightStaff_input = document.getElementById("nightStaff").firstElementChild;
+  let nightStaff = document.getElementById("nightStaff");
+  let staffNum_input = document.getElementById("staffNum").firstElementChild;
+  let staffNum = document.getElementById("staffNum");
+
+  if(type == "update") {
+    input_html = fn_set_input(0, 0);
+    if(nightStaff != null && nightStaff != ""){
+      let text = nightStaff.innerHTML;
+      nightStaff.innerHTML = input_html;
+      nightStaff.firstElementChild.value = text;
+    }
+    if(staffNum != null && staffNum != ""){
+      text = staffNum.innerHTML;
+      staffNum.innerHTML = input_html;
+      staffNum.firstElementChild.value = text;
+    }
+  }else if(type == "print") {
+    if(nightStaff_input != null && nightStaff_input != ""){
+      let value = nightStaff_input.value.replaceAll(" ", "");
+      nightStaff_input.parentElement.innerHTML = value;
+    }
+    if(staffNum_input != null && staffNum_input != ""){
+      let value = staffNum_input.value.replaceAll(" ", "");
+      staffNum_input.parentElement.innerHTML = value;
     }
   }
 }
 
 function fn_set_input(i, j){
   switch (i) {
+    case 0 :
+      input_html = '<input type="text" value=""/>';
+      break;
     case 3 : 
       input_html = '<input type="text" class="staff'+i+'A" value=""/>'
       break;
@@ -450,6 +526,7 @@ function fn_change_room_type(){
   switch (roomType) {
     case roomTypeList[0] : 
       this.style.color = "red";
+      this.style.fontSize = "medium";
       nextRoomType = roomTypeList[1];
       vCnt--;
       cCnt++;
@@ -468,8 +545,15 @@ function fn_change_room_type(){
       ooCnt++;
       break;
     case roomTypeList[3] : 
+      this.style.color = "red";
+      this.style.fontSize = "large";
+      nextRoomType = roomTypeList[4];
+      ooCnt--;
+      vCnt++;
+      break;
+    case roomTypeList[4] : 
       this.style.color = "black";
-      this.style.fontSize = "medium";
+      this.style.fontSize = "small";
       nextRoomType = roomTypeList[0];
       ooCnt--;
       vCnt++;
@@ -489,10 +573,10 @@ function fn_change_room_type(){
 
 function fn_notCleaning(){
   notCleaning = 0;
-  /*if(totalCnt != 372){
-    alert("Occupied 처리를 해주시기 바랍니다.");
+  if(sCnt < 3){
+    alert("Occupied 처리 후 진행해 주시기 바랍니다.");
     return;
-  }*/
+  }
   let startRoomNo = 1;
   let endRoomNo = 31;
   let floorNo = "";
@@ -536,11 +620,9 @@ function fn_notCleaning(){
       }
       var roomSId = document.getElementById("s_" + roomNo);
       var staffNm = document.getElementById("u_" + roomNo).firstElementChild.value;
-      console.log(roomNo);
-      console.log(document.getElementById("u_" + roomNo).firstElementChild.innerHTML);
-      if((roomSId.innerHTML == "C" || roomSId.innerHTML == "O") &&
+      if((roomSId.innerHTML == "C" || roomSId.innerHTML == "ⓥ" || roomSId.innerHTML == "O") &&
           staffNm == "") {
-        roomSId.style.backgroundColor = "#fca8ff";
+        roomSId.style.backgroundColor = "#ffe3ff";
         notCleaning++;
       }else{
         roomSId.style.backgroundColor = "";
