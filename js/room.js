@@ -34,6 +34,19 @@ const b_type = ["4B"
               , "15B"]
 let b_staff = []
 
+const c_type = ["4C"
+              , "5C"
+              , "6C"
+              , "7C"
+              , "8C"
+              , "9C"
+              , "10C"
+              , "11C"
+              , "12C"
+              , "14C"
+              , "15C"]
+let c_staff = []
+
 let roomTypeList = ["V"
                   , "C"
                   , "O"
@@ -290,6 +303,23 @@ function fn_floor_staff(){
       b_staff[i] = bStaff;
     }
   }
+  for(i in c_type){
+    var cStaff = document.getElementById(c_type[i]).value;
+    if(cStaff != undefined){
+      var cRStaff = document.getElementsByClassName("staff"+c_type[i]);
+      let cRoomNoClass = "floor" + c_type[i];
+      let cRoomNo = document.getElementsByClassName(cRoomNoClass);
+      for(var j = 0 ; j < cRStaff.length ; j++){
+        if(cStaff == ""){
+          cRoomNo[j].style.backgroundColor = "#fbffad";
+        }else{
+          cRoomNo[j].style.backgroundColor = "";
+          cRStaff[j].value = cStaff;
+        }
+      }
+      b_staff[i] = bStaff;
+    }
+  }
   if(totalCnt == 372){
     fn_notCleaning();
   }
@@ -304,6 +334,11 @@ function fn_floor_staff_re_set(){
   for(var i = 0 ; i < 11 ; i++){
     if(b_staff[i] != null && b_staff[i] != undefined){
       document.getElementById(b_type[i]).value = b_staff[i];
+    }
+  }
+  for(var i = 0 ; i < 11 ; i++){
+    if(c_staff[i] != null && c_staff[i] != undefined){
+      document.getElementById(c_type[i]).value = c_staff[i];
     }
   }
 }
