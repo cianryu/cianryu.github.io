@@ -90,7 +90,11 @@ function readExcel1() {
   reader.onload = function () {
     let data = reader.result;
     let workBook = XLSX.read(data, { type: 'binary' });
+    console.log("sheetName : " + workBook.SheetNames[1]);
     workBook.SheetNames.forEach(function (sheetName) {
+      if(sheetName == "Expected Departure List - Group"){
+        return false;
+      }
       let rows = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName]);
       const datas = rows.map(parent => {
         return Object.keys(parent).reduce((acc, key) => ({
@@ -108,11 +112,15 @@ function readExcel1() {
         document.getElementById("uploadBtn1").value = "";
         return false;
       }
+      var testNo = 0;
       datas.forEach(row => {
         let depDate = row.DepDate.replace(" ","");
         if(depDate != ""){
           var roomSId = document.getElementById("s_"+row.RmNo);
-          if(roomSId != null && (roomSId.innerHTML != "C" || roomSId.innerHTML != "ⓥ")){
+          if(roomSId != null && (roomSId.innerHTML != "C")){
+            if(roomSId.innerHTML == "ⓥ"){
+              console.log(testNo++);
+            }
             roomSId.innerHTML = "C";
             roomSId.style.color = "red";
             ++cCnt;
