@@ -128,7 +128,7 @@ input:focus {outline:none;}
   width: 4.2%;
   font-size: medium;
 }
-.floor{
+.room > tbody > tr:first-child > td{
   border: 2px solid #444444;
   font-weight: bold;
 }
