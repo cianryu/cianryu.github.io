@@ -11473,3 +11473,7 @@ section.resume-section .resume-section-content {
     padding-bottom: 10rem;
   }
 }
+.skill-pic {
+  width : 130%;
+  margin-left : -5rem;
+}
